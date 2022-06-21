@@ -60,39 +60,6 @@ This function should only modify configuration layer settings."
          git-enable-magit-delta-plugin t
          git-enable-magit-todos-plugin t
          go-backend 'lsp)
-     (helm)
-     ;; lsp
-     ;; markdown
-     (multiple-cursors)
-     (nixos :variables
-            nix-backend 'lsp
-            nixos-format-on-save t)
-     (plantuml :variables
-               plantuml-jar-path "~/.plantuml/plantuml-current.jar")
-     (python :variables
-             python-backend 'lsp
-             python-lsp-server 'mspyls
-             python-lsp-git-root "~/dev/python/python-language-server")
-     ;; see https://develop.spacemacs.org/layers/+lang/ruby/README.html
-     (ruby  :variables
-            ruby-enable-enh-ruby-mode t
-            ruby-backend 'robe
-            ;ruby-version-manager 'rvm
-            ruby-version-manager 'rbenv
-            ruby-test-runner 'rspec
-            ruby-prettier-on-save t)
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
-     ;; syntax-checking
-     ;; version-control
-     (treemacs)
-     ;; see https://develop.spacemacs.org/layers/+lang/yaml/README.html
-     ;; requires:
-     ;;   - yaml-language-server: nmp -i yaml-language-server
-     (yaml :variables
-           yaml-enable-lsp t))
 
 
    ;; List of additional packages that will be installed without being wrapped

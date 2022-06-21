@@ -53,7 +53,9 @@
   (use-package dired
     :defer t
     :config
-    (evilified-state-evilify dired-mode dired-mode-map
+    (evilified-state-evilify-map dired-mode-map
+      :mode dired-mode
+      :bindings
       "j"         'vinegar/move-down
       "k"         'vinegar/move-up
       "-"         'vinegar/up-directory
@@ -62,7 +64,7 @@
       (kbd "C-j") 'dired-next-subdir
       (kbd "C-k") 'dired-prev-subdir
       "I"         'vinegar/dotfiles-toggle
-      (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+      (kbd "~")   (lambda ()(interactive) (find-alternate-file "~/"))
       (kbd "RET") (if vinegar-reuse-dired-buffer
                       'dired-find-alternate-file
                     'dired-find-file)
