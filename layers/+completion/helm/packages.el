@@ -1,6 +1,6 @@
 ;;; packages.el --- Helm Layer packages File
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -183,7 +183,8 @@
       ;; helm-locate uses es (from everything on windows which doesn't like fuzzy)
       (helm-locate-set-command)
       (setq helm-locate-fuzzy-match (and (bound-and-true-p helm-use-fuzzy)
-                                         (string-match "locate" helm-locate-command)))
+                                         (string-match "locate" helm-locate-command)
+                                         t))
       (setq helm-boring-buffer-regexp-list
             (append helm-boring-buffer-regexp-list
                     spacemacs-useless-buffers-regexp))

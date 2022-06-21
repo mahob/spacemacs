@@ -1,6 +1,6 @@
 ;;; packages.el --- Python Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -100,7 +100,7 @@
   (use-package code-cells
     :if (not (configuration-layer/layer-used-p 'ipython-notebook))
     :defer t
-    :init
+    :config
     (progn
       (add-hook 'python-mode-hook 'code-cells-mode)
       (spacemacs/set-leader-keys-for-minor-mode 'code-cells-mode

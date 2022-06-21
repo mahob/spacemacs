@@ -1,6 +1,6 @@
 ;;; packages.el --- Spacemacs Navigation Layer packages File
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -367,7 +367,7 @@
 
 (defun spacemacs-navigation/init-restart-emacs ()
   (use-package restart-emacs
-    :defer t
+    :after files
     :init
     (spacemacs/set-leader-keys
       "qd" 'spacemacs/restart-emacs-debug-init

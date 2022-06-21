@@ -1,6 +1,6 @@
 ;;; packages.el --- Git Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -355,7 +355,8 @@
     :init
     (progn
       (setq forge-database-file (concat spacemacs-cache-directory
-                                        "forge-database.sqlite"))
+                                        "forge-database.sqlite")
+            forge-add-default-bindings nil)
       (spacemacs/set-leader-keys-for-major-mode 'forge-topic-mode
         "a" 'forge-edit-topic-assignees
         "c" 'forge-create-post

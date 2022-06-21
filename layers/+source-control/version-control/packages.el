@@ -1,6 +1,6 @@
 ;;; packages.el --- Source Control Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -90,11 +90,14 @@
         "H" 'log-view-toggle-entry-display
         "o" 'ace-link-woman)
       (evilified-state-evilify-map vc-svn-log-view-mode-map
-        :mode vc-svn-log-view-mode)
+        :mode vc-svn-log-view-mode
+        :eval-after-load vc-svn)
       (evilified-state-evilify-map vc-git-log-view-mode-map
-        :mode vc-git-log-view-mode)
-      (evilified-state-evilify-map vc-git-log-view-mode-map
-        :mode vc-hg-log-view-mode))
+        :mode vc-git-log-view-mode
+        :eval-after-load vc-git)
+      (evilified-state-evilify-map vc-hg-log-view-mode-map
+        :mode vc-hg-log-view-mode
+        :eval-after-load vc-hg))
     (with-eval-after-load 'vc-annotate
       (evilified-state-evilify-map vc-annotate-mode-map
        :mode vc-annotate-mode
