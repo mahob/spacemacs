@@ -67,6 +67,9 @@ This function should only modify configuration layer settings."
          git-enable-magit-delta-plugin t
          git-enable-magit-todos-plugin t
          go-backend 'lsp)
+     ;; see https://develop.spacemacs.org/layers/+lang/html/README.html
+     ;; plays well with 'web-beautify' layer
+     (html)
      ;; see https://develop.spacemacs.org/layers/+lang/java/README.html
      (java :variables java-backend 'lsp)
      ;; lsp
@@ -93,6 +96,11 @@ This function should only modify configuration layer settings."
      ;; syntax-checking
      ;; version-control
      (treemacs)
+     ;; see https://develop.spacemacs.org/layers/+tools/web-beautify/README.html
+     ;; adds formatting support for html layer
+     ;; requires:
+     ;;   - js-beautify: npm install -g js-beautify
+     (web-beautify)
      ;; see https://develop.spacemacs.org/layers/+lang/yaml/README.html
      ;; requires:
      ;;   - yaml-language-server: nmp -i yaml-language-server
