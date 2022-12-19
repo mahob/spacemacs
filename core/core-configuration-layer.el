@@ -33,6 +33,7 @@
 (require 'core-funcs)
 (require 'core-progress-bar)
 (require 'core-spacemacs-buffer)
+(require 'core-load-paths)
 
 (defvar configuration-layer--refresh-package-timeout dotspacemacs-elpa-timeout
   "Timeout in seconds to reach a package archive page.")
@@ -452,7 +453,9 @@ cache folder.")
         quelpa-build-dir (expand-file-name "build" quelpa-dir)
         quelpa-persistent-cache-file (expand-file-name "cache" quelpa-dir)
         quelpa-update-melpa-p nil)
-  (require 'quelpa))
+  (require 'quelpa)
+  (when (eq (quelpa--tar-type) 'gnu)
+    (setq quelpa-build-explicit-tar-format-p t)))
 
 (defun configuration-layer//make-quelpa-recipe (pkg)
   "Read recipe in PKG if :fetcher is local, then turn it to a correct file recepe.
@@ -1516,8 +1519,9 @@ If `SKIP-LAYER-DEPS' is non nil then skip loading of layer dependenciesl"
 (defun configuration-layer/declare-layer-dependencies (layer-names)
   "Function to be used in `layers.el' files to declare dependencies."
   (dolist (x layer-names)
-    (add-to-list 'configuration-layer--layers-dependencies x)
-    (configuration-layer//load-layer-files x '("layers"))))
+    (unless (member x configuration-layer--layers-dependencies)
+      (add-to-list 'configuration-layer--layers-dependencies x)
+      (configuration-layer//load-layer-files x '("layers")))))
 
 (defun configuration-layer//declare-used-layers (layers-specs)
   "Declare used layers from LAYERS-SPECS list."
@@ -1597,7 +1601,7 @@ RNAME is the name symbol of another existing layer."
          lname))
       (when (null rlayer)
         (configuration-layer//warning
-         "Unknown layer %s to declare lshadow relationship."
+         "Unknown layer %s to declare rshadow relationship."
          rname)))))
 
 (defun configuration-layer//set-layers-variables (layer-names)

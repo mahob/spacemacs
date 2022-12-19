@@ -30,6 +30,7 @@
 (require 'eieio)
 (require 'url-parse)
 
+(defvar package-build-use-git-remote-hg)
 (defvar package-build-recipes-dir)
 (defvar package-build-working-dir)
 
@@ -50,25 +51,6 @@
    (old-names       :initarg :old-names      :initform nil))
   :abstract t)
 
-(cl-defmethod package-recipe--working-tree ((rcp package-recipe))
-  (file-name-as-directory
-   (expand-file-name (oref rcp name) package-build-working-dir)))
-
-(cl-defmethod package-recipe--upstream-url ((rcp package-recipe))
-  (or (oref rcp url)
-      (format (oref rcp url-format)
-              (oref rcp repo))))
-
-(cl-defmethod package-recipe--upstream-protocol ((rcp package-recipe))
-  (let ((url (package-recipe--upstream-url rcp)))
-    (cond ((string-match "\\`\\([a-z]+\\)://" url)
-           (match-string 1 url))
-          ((string-match "\\`[^:/ ]+:" url) "ssh")
-          (t "file"))))
-
-(cl-defmethod package-recipe--fetcher ((rcp package-recipe))
-  (substring (symbol-name (eieio-object-class rcp)) 8 -7))
-
 ;;;; Git
 
 (defclass package-git-recipe (package-recipe) ())
@@ -81,9 +63,51 @@
   ((url-format      :initform "https://gitlab.com/%s.git")
    (repopage-format :initform "https://gitlab.com/%s")))
 
+(defclass package-codeberg-recipe (package-git-recipe)
+  ((url-format      :initform "https://codeberg.org/%s.git")
+   (repopage-format :initform "https://codeberg.org/%s")))
+
+(defclass package-sourcehut-recipe (package-git-recipe)
+  ((url-format      :initform "https://git.sr.ht/~%s")
+   (repopage-format :initform "https://git.sr.ht/~%s")))
+
 ;;;; Mercurial
 
 (defclass package-hg-recipe (package-recipe) ())
+
+(defclass package-git-remote-hg-recipe (package-git-recipe) ())
+
+;;; Methods
+
+(cl-defmethod package-recipe--working-tree ((rcp package-recipe))
+  (file-name-as-directory
+   (expand-file-name (oref rcp name) package-build-working-dir)))
+
+(cl-defmethod package-recipe--upstream-url ((rcp package-recipe))
+  (or (oref rcp url)
+      (format (oref rcp url-format)
+              (oref rcp repo))))
+
+(cl-defmethod package-recipe--upstream-url ((rcp package-git-remote-hg-recipe))
+  (concat "hg::" (oref rcp url)))
+
+(cl-defmethod package-recipe--upstream-protocol ((rcp package-recipe))
+  (let ((url (package-recipe--upstream-url rcp)))
+    (cond ((string-match "\\`\\([a-z]+\\)://" url)
+           (match-string 1 url))
+          ((string-match "\\`[^:/ ]+:" url) "ssh")
+          (t "file"))))
+
+(cl-defmethod package-recipe--fetcher ((rcp package-recipe))
+  (substring (symbol-name (eieio-object-class rcp)) 8 -7))
+
+;;; Constants
+
+(defconst package-recipe--forge-fetchers
+  '(github gitlab codeberg sourcehut))
+
+(defconst package-recipe--fetchers
+  (append '(git hg) package-recipe--forge-fetchers))
 
 ;;; Interface
 
@@ -113,6 +137,8 @@ file is invalid, then raise an error."
             (unless (eq key :fetcher)
               (push val args)
               (push key args)))
+          (when (and package-build-use-git-remote-hg (eq fetcher 'hg))
+            (setq fetcher 'git-remote-hg))
           (apply (intern (format "package-%s-recipe" fetcher))
                  name :name name args))
       (error "No such recipe: %s" name))))
@@ -137,7 +163,7 @@ file is invalid, then raise an error."
           (cl-assert (memq thing all-keys) nil "Unknown keyword %S" thing)))
       (let ((fetcher (plist-get plist :fetcher)))
         (cl-assert fetcher nil ":fetcher is missing")
-        (if (memq fetcher '(github gitlab))
+        (if (memq fetcher package-recipe--forge-fetchers)
             (progn
               (cl-assert (plist-get plist :repo) ":repo is missing")
               (cl-assert (not (plist-get plist :url)) ":url is redundant"))
