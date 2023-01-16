@@ -74,6 +74,8 @@ This function should only modify configuration layer settings."
      (html)
      ;; see https://develop.spacemacs.org/layers/+lang/java/README.html
      (java :variables java-backend 'lsp)
+     ;; see https://develop.spacemacs.org/layers/+lang/javascript/README.html
+     (javascript)
      ;; lsp
      ;; markdown
      (multiple-cursors)
