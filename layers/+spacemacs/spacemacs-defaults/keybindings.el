@@ -66,6 +66,7 @@
                                        "p"   "projects"
                                        "q"   "quit"
                                        "r"   "registers/rings/resume"
+                                       "rd"  "purpose-toggle-window"
                                        "s"   "search/symbol"
                                        "sa"  "ag"
                                        "sg"  "grep"
@@ -418,6 +419,7 @@
   "hdc" 'describe-char
   "hdf" 'describe-function
   "hdk" 'describe-key
+  "hdK" 'describe-keymap
   "hdl" 'spacemacs/describe-last-keys
   "hdp" 'describe-package
   "hdP" 'configuration-layer/describe-package
@@ -1118,4 +1120,3 @@ If FRAME is nil, it defaults to the selected frame."
 
 (spacemacs/set-leader-keys "TB"
   'spacemacs/scale-background-transparency-transient-state/spacemacs/toggle-background-transparency)
-
