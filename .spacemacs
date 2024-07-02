@@ -38,36 +38,97 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
-     ;; better-defaults
+     (ansible)
+     (auto-completion)
+     (better-defaults)
+     (clojure)
+     ;; see https://github.com/juxtin/cucumber-layer
+     ;; requires
+     ;;   package 'feature-mode': M-x package-install RET feature-mode RET
+     ;;(cucumber)
+     ;; see https://develop.spacemacs.org/layers/+tools/dap/README.html
+     (dap)
+     ;; see https://develop.spacemacs.org/layers/+tools/docker/README.html
+     ;; requires:
+     ;;   - hadolint: `brew install hadolint`
+     ;;   - dockerfile-language-server-nodejs: npm i -g dockerfile-language-server-nodejs
      (docker :variables
              docker-dockerfile-backend 'lsp)
-     emacs-lisp
-     git
+     (emacs-lisp)
+     ;; see https://develop.spacemacs.org/layers/+vim/evil-commentary/README.html
+     (evil-commentary)
+     ;; see https://develop.spacemacs.org/layers/+source-control/git/README.html
+     ;; install magit with `M-x package-install RET magit RET'
+     ;; requires:
+     ;;   - git-flow: brew install git-flow-avh
+     ;;   - git-delta: brew install git-delta
+     (git :variables
+          git-enable-magit-delta-plugin t
+          git-enable-magit-gitflow-plugin t)
      (go :variables
          git-enable-magit-delta-plugin t
          git-enable-magit-todos-plugin t
          go-backend 'lsp)
-     helm
+     ;; see https://develop.spacemacs.org/layers/+lang/html/README.html
+     ;; plays well with 'web-beautify' layer
+     (html)
+     ;; see https://develop.spacemacs.org/layers/+lang/java/README.html
+     (java :variables java-backend 'lsp)
+     ;; see https://develop.spacemacs.org/layers/+lang/javascript/README.html
+     (javascript :variables js2-basic-offset 2)
      ;; lsp
      ;; markdown
-     multiple-cursors
+     (multiple-cursors)
+     (nixos :variables
+            nix-backend 'lsp
+            nixos-format-on-save t)
+     (plantuml :variables
+               plantuml-jar-path "~/.plantuml/plantuml-current.jar")
+     ;; see https://develop.spacemacs.org/layers/+lang/perl5/README.html
+     ;; requires:
+     ;;   - installation of cpan Perl::LanguageServer
+     (perl5 :variables
+            perl5-backend 'lsp)
+     (python :variables
+             python-backend 'lsp
+             python-lsp-server 'mspyls
+             python-lsp-git-root "~/dev/python/python-language-server")
+     ;; see https://develop.spacemacs.org/layers/+lang/ruby/README.html
      (ruby  :variables
             ruby-enable-enh-ruby-mode t
-            ruby-backend 'robe
-            ruby-version-manager 'rvm
+            ;ruby-backend 'robe
+            ruby-backend 'lsp
+            ruby-version-manager 'rbenv
             ruby-test-runner 'rspec
             ruby-prettier-on-save t)
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
-     ;; syntax-checking
-     ;; version-control
-     treemacs
+     ;; see https://develop.spacemacs.org/layers/+lang/rust/README.html
+     (rust)
+     ;; see https://develop.spacemacs.org/layers/+lang/sql/README.html
+     ;; requires:
+     ;;   - go install github.com/lighttiger2505/sqls@latest
+     (sql :variables
+          sql-backend 'lsp
+          sql-lsp-sqls-workspace-config-path 'workspace)
+     (systemd)
+     (treemacs)
+     ;; see https://develop.spacemacs.org/layers/+fonts/unicode-fonts/README.html
+     (unicode-fonts :variables unicode-fonts-enable-ligatures t)
+     ;; see https://develop.spacemacs.org/layers/+tools/web-beautify/README.html
+     ;; adds formatting support for html layer
+     ;; requires:
+     ;;   - js-beautify: npm install -g js-beautify
+     (web-beautify)
+     ;; see https://develop.spacemacs.org/layers/+lang/windows-scripts/README.html
+     (windows-scripts)
+     ;; see https://develop.spacemacs.org/layers/+tools/xclipboard/README.html
+     ;; requires:
+     ;;   - yum install xsel
+     (xclipboard)
+     ;; see https://develop.spacemacs.org/layers/+lang/yaml/README.html
+     ;; requires:
+     ;;   - yaml-language-server: nmp -i yaml-language-server
      (yaml :variables
            yaml-enable-lsp t))
-
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -584,7 +645,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode helm-gtags godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc ggtags flycheck-golangci-lint dap-mode bui counsel-gtags counsel swiper ivy company-go go-mode yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe restart-emacs request rbenv rake rainbow-delimiters quickrun prettier-js popwin password-generator paradox overseer org-superstar open-junk-file nameless multi-line minitest macrostep lsp-ui lsp-treemacs lsp-origami lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-lsp helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu enh-ruby-mode emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dockerfile-mode docker dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode chruby centered-cursor-mode bundler auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+   '(cargo flycheck-rust wfnames racer ron-mode rust-mode toml-mode company-php ac-php-core xcscope company-phpactor drupal-mode geben php-mode phpactor composer php-runtime phpunit sql-indent sqlup-mode evil-commentary systemd journalctl-mode bmx-mode counsel-gtags counsel swiper ivy ggtags helm-gtags powershell ansible ansible-doc company-ansible jinja2-mode feature-mode help-fns+ space-doc spacemacs-purpose-popwin spacemacs-whitespace-cleanup vim-empty-lines-mode vim-powerline evil-evilified-state holy-mode yasnippet-snippets yapfify yaml-mode ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection string-edit sphinx-doc spaceline-all-the-icons smeargle seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe restart-emacs request rbenv rake rainbow-delimiters quickrun pytest pyenv-mode pydoc py-isort prettier-js popwin poetry plantuml-mode pippel pipenv pip-requirements password-generator paradox overseer org-superstar open-junk-file nose nix-mode nameless mwim multi-line minitest magithub magit-todos magit-gitflow magit-delta macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic hybrid-mode hungry-delete highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org helm-nixos-options helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-flx helm-descbinds helm-company helm-cider helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gitignore-templates git-timemachine git-modes git-messenger git-link fuzzy forge font-lock+ flycheck-vdm flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu enh-ruby-mode emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dockerfile-mode docker dired-quick-sort diminish devdocs define-word dap-mode cython-mode company-nixos-options company-go company-anaconda column-enforce-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode bundler blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
+ '(warning-suppress-types '((emacs))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -592,3 +654,4 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
 )
+
