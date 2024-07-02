@@ -34,6 +34,9 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 * Release 0.300.x
 ** 0.300.0
 *** Hot new feature
+- Add configuration layer for gleam-lang (thanks to Qynn Schwaab)
+- Highlight ruby debugger lines appropriately
+- Add support for Android emacs.
 - Extensive use of lazy loading of packages and other tricks to reduce Spacemacs
   startup time. In most cases you should see a noticable improvement in load
   time and smoothness in startup. We also added the time spent to load your
@@ -75,6 +78,9 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   (thanks to Sylvain Benner, Compro Prasad and Keith Simmons)
 - Added support for native fill column indicator in Emacs 27+ (thanks to
   Andriy Kmit)
+- Add support for background transparency aka true transparency. Key bindings are under ~SPC T B~ (thanks to JoshTRN)
+- Binding the ~SPC f d~ for deleting current buffer and file (thanks to Lin Sun)
+- Deprecate =company-elm= backend in =elm= layer (thanks to Qynn Schwaab)
 *** Breaking Changes
 **** Major
 - Support for Emacs 25 or Emacs 26 has been dropped, the minimal Emacs version
@@ -100,6 +106,8 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - The property =:powerline-scale= of variable =dotspacemacs-default-font= has
   been removed and replaced by the property =:separator-scale= used in the new
   dotfile variable =dotspacemacs-mode-line-theme=.
+- Fix issue where clicking on the recent files list in the Spacemacs buffer would
+  produce a type error.
 **** Layers
 ***** Spacemacs distribution layers
 - Key bindings:
@@ -127,6 +135,11 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
     (thanks to Seong Yong-ju)
   - Changed ~SPC t t m~ from ~timeclock-modeline-display~ which was deprecated
     in Emacs 24.3 to ~timeclock-mode-line-display~ (thanks to Zach Pearson)
+  - Added =vim-style-enable-undo-region= style variables to enable undo-region
+    in Vim editing style; disabled by default. (thanks to Benedict HW)
+  - Added ~SPC m r R~ to show tide refactorings submenu (thanks to Roberto
+    Previdi)
+  - Added ~SPC m R F~ to autocorrect the current ruby file.
 - Other:
   - Support for multiple cursors using =evil-mc= is now encapsulated in the
     =multiple-cursors= layer (thanks to Codruț Constantin Gușoi)
@@ -136,6 +149,9 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - LSP code navigation / completion added via clangd or ccls
   (thanks to Cormac Cannon)
 - Removed cquery.
+***** D
+- Fixed layer crashing because of a deprecated function in flycheck-dmd-dub
+  (thanks to Alecu Ștefan-Iulian)
 ***** EPUB
 - Add ~J/K~ for scrolling down/up (thanks to Daniel Nicolai)
 ***** ESS
@@ -162,6 +178,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   - ~SPC m s r~ for =ess-eval-region=
   - ~SPC m s s~ for =ess-switch-to-inferior-or-script-buffer=
   - ~SPC m w~ for =ess-r-package-dev-map=
+- Fixed key bindings for ESS inferior modes (Nicholas Kirchner)
 ***** Elixir
 - Key bindings;
   - Changed ~SPC m p t~ to ~SPC m t F~ for =alchemist-project-find-test=
@@ -330,6 +347,9 @@ In org-agenda-mode
     Gușoi)
   - Added ~SPC m r "~ for =ruby-toggle-string-quotes= (thanks to Codruț
     Constantin Gușoi)
+***** Rust
+Removed support for Racer, default backend for LSP is now rust-analizer due to
+both Racer and RLS not being maintained anymore.
 ***** Ruby on Rails
 - Key bindings:
   - New ~SPC m r f S~ to find serializer (thanks to Boris Buliga)
@@ -339,12 +359,18 @@ In org-agenda-mode
 ***** Search-engine
   - Add Debian & Ubuntu package search engines (thanks to Alfonso Montero).
   - Allow to configure a TLD other than =.com= for Amazon searches (thanks to Alfonso Montero).
+  - Add Rails API search engine
+  - Add Docker Hub image search engine (thanks to Alfonso Montero).
 ***** Spacemacs-navigation
 - Key bindings:
   - Add ~J/K~ to scroll up/down (or next/previous node) in Info-mode
   - Add ~o~ to link-hint-open-link in woman-mode
 ***** Shaders
 - =shaders= layer has been moved to =gpu= layer.
+***** Shell
+- Add support for "eat" shell (thanks to Ryan Prior)
+***** Shell-scripts
+- Add variable =shell-scripts-shfmt-args= to pass through arguments to =shfmt= package.
 ***** Syntax checking
 - Key bindings (thanks to Loris Lucido):
   - Key binding ~SPC e e~ is now for triggering a syntax check, the old action
@@ -414,6 +440,7 @@ In org-agenda-mode
 - extempore (thanks to Ben Swift)
 - factor (thanks to timor)
 - forth (thanks to Tim Jaeger)
+- fountain (thanks to Damien Picard)
 - gpu (thanks to Evan Klitzke)
 - groovy (thanks to Sylvain Benner)
 - hy (thanks to Sylvain Benner and yuhan0)
@@ -479,6 +506,7 @@ In org-agenda-mode
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - tide (thanks to Thanh Vuong)
+- translate (thanks to Ray Wang)
 - transmission (thanks to Eugene Yaremenko)
 - web-beautify (thanks to Sylvain Benner and Juuso Valkeejärvi)
 - xclipboard (thanks to Charles Weill, Sylvain Benner, and Alex Palaistras)
@@ -490,6 +518,7 @@ In org-agenda-mode
 - hackernews
 - streamlink
 - twitch
+- openai (thanks to Hendrik Rommeswinkel)
 *** Renamed layers
 - =extra-langs= renamed to =major-modes= (thanks to Eivind Fonn)
 - =pdf-tools= renamed to =pdf=
@@ -540,6 +569,7 @@ In org-agenda-mode
   - New var =dotspacemacs-startup-buffer-multi-digit-delay= (thanks to duianto)
   - New variable =dotspacemacs-scroll-bar-while-scrolling= (thanks to duianto)
   - New variable =dotspacemacs-show-startup-list-numbers= (thanks to duianto)
+  - New variable =dotspacemacs-startup-banner-scale= (thanks to Daniel)
 - Removed Variables:
   - Removed unused variable =dotspacemacs-verbose-loading= from
     =.spacemacs.template= (thanks to Ying Qu)
@@ -818,6 +848,8 @@ Other:
   - Add evil-jump-backward/forward (=C-o=/=C-i=) keybindings to
     evil-evilified-state-map (thanks to Daniel Nicolai)
   - Improve helm completion in spacemacs-help (thanks to @dankessler)
+  - Improve the =configuration-layer/declare-layer-dependencies= to avoid loading
+    the dependence layers multiple times (thank to Lin Sun)
 *** Distribution changes
 - Refactored =spacemacs-bootstrap=, =spacemacs-ui=, and =spacemacs-ui-visual=
   layers:
@@ -859,6 +891,8 @@ Other:
     (thanks to rayw000)
   - Added =string-edit= package to =spacemacs-editing= layer
     (thanks to Ivan Yonchovski)
+  - Remove package =evil-ediff=
+    (thanks to Xuanqing Xu)
 - Key bindings:
   - Toggle line numbers (i.e. toggle =display-line-numbers-mode=) via ~SPC t n n~
     without having to think about which variant of line numbers you have turned
@@ -1186,6 +1220,7 @@ Other:
   - Added ~SPC x n~ for multi-line transient state
     (thanks to Tristan Harmer)
   - Added ~s~ =hydra-dired-quick-sort/body= (thanks to duianto)
+  - Added ~SPC p E~ for =projectile-find-references= (thanks to Alfonso Montero)
 - Improvements:
   - Inhibited golden-ratio mode from interfering with ediff windows
   - Rewrote window layout functions for ~SPC w 1~, ~SPC w 2~, ~SPC w 3~, and
@@ -1477,6 +1512,8 @@ Other:
   - Set =evil-undo-system= to =undo-tree= (thanks to duianto)
   - Checked that =evil-undo-system= exists before it's called (thanks to khjcph)
   - Fixed ~SPC w TAB~ golden-ratio resizing.
+  - Fixed ~SPC h f~ =helm-spacemacs-help-faq= again by fixing
+    helm-spacemacs-help//get-faq-headings-list (thanks to greenrecyclebin)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1548,6 +1585,9 @@ Other:
   - Replaced =org-ref-helm-insert-cite-link= with =org-ref-insert-link=
     (thanks to Tianshu Wang)
   - Add [[https://joostkremers.github.io/ebib/ebib-manual.html][ebib]] support (thanks to Daniel Nicolai)
+**** Bm
+- Add more package's recommended hooks, as per docs (thanks to Alfonso Montero)
+- Key binds: Add ~s~ for =bm-show-all= in transient (thanks to Alfonso Montero)
 **** C-C++
 - Breaking changes:
   - Moved =cmake-ide= and cmake script support to separate =cmake= layer
@@ -1625,6 +1665,8 @@ Other:
   - Added =fcitx5= support (thanks to wgjak47)
 - Fixes:
   - Make =fcitx.el= work by default (thanks to AmaiKinono)
+  - Evilify the pyim-dict-manager-mode-map after the pyim-dict-manager-mode be
+    loaded (thanks to Lin Sun)
 **** Chrome
 - Key bindings:
   - Added =markdown= key bindings to gmail message mode
@@ -1812,10 +1854,20 @@ Other:
     - Added ~SPC m s l~ for =coffee-send-line=
     - Added ~SPC m s r~ for =coffee-send-region=
     - Added ~SPC m T c~ for =coffee-cos-mode=
+**** Command-log
+- Key bindings:
+  -  ~SPC a t k h~ display keycast in buffer header (thanks to John Stevenson)
+  -  ~SPC a t k m~ display keycast in modeline (thanks to John Stevenson)
+  -  ~SPC a t k t~ display keycast in tab bar (thanks to John Stevenson)
+- Improvements:
+  - ~keycast-mode-line-insert-after~ variable used to include keycast in
+    mode-line-format (thanks to John Stevenson)
 **** Common Lisp
 - Improvements:
   - Added eval-thing-at-point functions to Common Lisp Layer
     (thanks to Lukas Woell)
+  - Make ~SPC m '~ switch to REPL if slime is already connected instead of asking
+    if another inferior process should be started. (thanks to Lou Woell)
   - Make rainbow-identifiers not colorize special operators and macros, so they
     always visually stand out. (thanks to Andriy Kmit)
 - New packages:
@@ -1908,6 +1960,11 @@ Other:
 - Fixed: broken package declaration for dockerfile-mode
   (thanks to Maximilian Wolff)
 - Added LSP support
+- Dockerfile mode keybindings (thanks to Alfonso Montero):
+  - Flatten ~cb~ and ~cB~ build commands into ~b~ and ~B~ to save keystrokes.
+  - Add keybindings to some =docker= package commands for convenience.
+- Fixed: wrong function name =dockerfile-build-no-cache-buffer= (thanks to
+  Samuele Favazza)
 **** Dotnet
 - Key bindings:
   - Added key bindings for =dotnet= (thanks to Jordan Kaye):
@@ -2021,6 +2078,7 @@ Other:
     - ~SPC m r d d~ for  =emr-delete-unused-definition=
     - ~SPC m e w~   for   =emr-eval-and-replace=
 - Added =elisp-def= integration (thanks to Thanh Vuong)
+- Added =elisp-demos= integration (thanks to Alfonso Montero)
 **** Emoji
 - Added support for Emoji fonts on macOS and Linux (thanks to CodeFalling)
 - Setup =emojify= cache directory (thanks to Boris Buliga)
@@ -2151,6 +2209,9 @@ Other:
   - Unbind ~C-f~ from =magit-gitflow-popup= (thanks to rayw000)
   - Implement performance hack for MacOS mentioned in Magit manual (thanks to
     Keith Pinson)
+  - Magit Forge key bindings for editing a topic, i.e. issue, PR (thanks to
+  - ~SPC m d~ Magit Forge toggle draft PR key bindings (thanks to
+    @practicalli-john)
 - Fixes:
   - Install magit-svn by default and activate with git-enable-magit-svn-plugin
   - Added feature to toggle =evil-magit= based on editing style
@@ -2685,6 +2746,7 @@ files (thanks to Daniel Nicolai)
   compiled PDF is changed (thanks to Lucius Hu)
 - Automatically configure =pdf-tools= as pdf viewer for =TeX-view= command (by default) (Thanks to Daniel Nicolai)
 - Add layer variable to open =pdf-tools= in split window (Thanks to Daniel Nicolai)
+- New package =evil-tex= (thanks to Dan Kessler)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
 - Added support for =LSP= (EmmyLua-LS-all, lua-language-server, lua-lsp) (thanks to Lin.Sun)
@@ -2734,6 +2796,8 @@ files (thanks to Daniel Nicolai)
   - Added global binding under ~SPC d~
 - Improvements:
   - Evilfied =dap= debug windows
+- Changed the dap-python debugger from =ptvsd= to =debugpy=. =ptvsd= is
+  deprecated in =dap-mode= and is broken in Spacemacs.
 **** Markdown
 - Fontify code blocks natively by default, for parity with the Org layer (thanks
   to Keith Pinson)
@@ -2903,6 +2967,8 @@ files (thanks to Daniel Nicolai)
 - Fixed ocamlformat not properly initialized by following do (thanks to Nicolas Raymond)
 - Allow new OPAM share commandline syntax (thanks to Cody McKenzie)
 **** Org
+- Add ~SPC m [~ for =org-agenda-file-to-front= and ~SPC m ]~ for =org-remove-file=
+  (thanks to Keith Pinson).
 - Add initial =org-transclusion= support behind =org-enable-transclusion-support=
   flag (thanks to Keith Pinson).
 - When =org-appear= is set to be triggered manually and Spacemacs' editing mode is
@@ -2923,6 +2989,7 @@ files (thanks to Daniel Nicolai)
   - Added package =org-contacts= (thanks to Daniel Nicolai)
   - Added package =org-appear= (thanks to winsphinX)
   - Added package =org-wild-notifier= (thanks to Daniel Nicolai)
+  - Added package =org-roam-ui= (thanks to winsphinX)
 - Key bindings:
   - ~SPC m s y~ for =org-copy-subtree= (thanks to Keith Pinson)
   - ~SPC m T i~ to toggle inline images
@@ -3129,6 +3196,7 @@ files (thanks to Daniel Nicolai)
 - Added declaration for the ~SPC P~ prefix (thanks to Codruț Constantin Gușoi)
 **** Pdf
 - Fixed ~'~ =pdf-view-jump-to-register= (thanks to duianto)
+- Fixed evilifying the pdf-outline-buffer-mode-map (thanks to Lin Sun)
 - Key bindings:
   - Added to pdf-view mode and transient state
     - ~[~ history-backward (previous view)
@@ -3268,6 +3336,8 @@ files (thanks to Daniel Nicolai)
 - Added =spacemacs/python-shell-send-statement= support (thanks to Lin Sun)
 - Added =sphinx-doc= support (thanks to Stefan Ruschke)
 - Fix ipython version parsing for dev branches (thanks to Corentin Risselin)
+- Fix pyvenv-workon path (thanks to Eugene Kim)
+- Remove mspyls for it was deprecated, use pyright instead (thanks to Lin Sun)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -3433,6 +3503,11 @@ files (thanks to Daniel Nicolai)
   =cargo-audit=, =rustfmt=, and =clippy= (thanks to Lucius Hu)
 - Added support for Rusty Object Notation (RON) (thanks to Daniel Hutzley)
 - Improved LSP Rust server switch functionality (thanks to Lucius Hu)
+- Added Rust GDB DAP template (thanks to Elric Milon)
+- Migrated to =rustic-mode= (thanks to Elric Milon)
+- Removed support for obsoleted =Racer= and =RLS= and made ==rust-analyzer= the
+  default (thanks to Elric Milon)
+- Updated layer documentation to correctly configure =rustfmt= on save (thanks to Mariusz Klochowicz)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
@@ -3441,6 +3516,8 @@ files (thanks to Daniel Nicolai)
     - ~SPC c s d~ Copy rpms to the phone
     - ~SPC c s i~ Install rpms into target
 **** Scala
+- Shortcut key for compiling integration tests in SBT (~It / compile~)
+  (thanks to Keith Pinson)
 - Shortcut key for compiling tests in SBT without running them (~Test / compile~)
   (thanks to Keith Pinson)
 - Shortcut keys for common/standard SBT commands (~scalafmtAll~, ~compile~ and ~test~)
@@ -3539,6 +3616,7 @@ files (thanks to Daniel Nicolai)
   - function: =spacemacs/make-variable-layout-local=
   (thanks to JAremko and duianto)
 - Better keybindings for ~ESC~ and ~RET~ in vterm =evil-normal-state= (thanks to kenkangxgwe)
+- Added support for multi-vterm as default terminal option
 **** Shell Scripts
 - Added new company-shell environment variable backend
   (thanks to Alexander-Miller)
@@ -3692,6 +3770,7 @@ files (thanks to Daniel Nicolai)
   (thanks to Dominic Pearson, Muneeb Shaikh)
 - Added highly accessible =modus-themes= (thanks to Muneeb Shaikh)
 - Added =doom-gruvbox-light= theme (thanks to John Stevenson)
+- Removed obsolete =darkburn-theme= (thanks to Muneeb Shaikh)
 **** Tmux
 - Prevent =tmux-command= at GUI mode (thanks to Isaac Zeng)
 - Fixed regression in tmux by setting keybindings using =use-package=
@@ -3744,6 +3823,17 @@ files (thanks to Daniel Nicolai)
     =typescript/jump-to-type-def= (thanks to Roy Choo)
   - ~SPC m r i~ to organize imports (thanks to Stéphane Bisinger)
   - ~SPC m r f~ to rename file (thanks to Stéphane Bisinger)
+  - Added =npm-mode= key bindings:
+    - ~SPC m n i~ to run the =npm install= command in the project root
+    - ~SPC m n r~ to show a list of available npm scripts, and execute the selected one
+    - ~SPC m n c~ to run the =npm clean= command in the project root
+    - ~SPC m n s~ to prompt for the name of an npm package, install it and save to =dependencies=
+    - ~SPC m n d~ to prompt for the name of an npm package, install it and save to =devDependencies=
+    - ~SPC m n n~ to initialize new project
+    - ~SPC m n u~ to remove project dependency
+    - ~SPC m n l~ to list installed project dependencies
+    - ~SPC m n p~ to visit project =package.json= file
+- Changed the default linter from tslint to eslint
 - Call tsfmt with extension of current buffer for TSX formatting
   (thanks to Victor Andrée)
 - Declare =tide-jump-to-definition= as async (thanks to Sylvain Benner)
@@ -3822,6 +3912,9 @@ files (thanks to Daniel Nicolai)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup
   (thanks to Voleking)
 - Fixed =git-gutter+= refresh when a buffer is staged or unstaged in Magit
+- Evilify the svn/git/hg mode-maps after their mode files be loaded
+  (thanks to Lin Sun)
+
 **** Vue
 - Added a toggle state minified/full to the transient state (thanks to duianto)
 **** Xclipboard
@@ -3900,6 +3993,8 @@ files (thanks to Daniel Nicolai)
   - DOCUMENTATION.org:
     - Fixed the example for how to change the separator style
       (thanks to Trey Merkley)
+    - Added documentation for navigating to next source in helm-find-file
+      (thanks to Lucas Leblow)
   - README.md:
     - Fixed macOS documentation to install fonts (thanks to Sergio Morales)
     - Updated Windows section, suggest official Emacs (thanks to ghost-420)
@@ -3907,6 +4002,8 @@ files (thanks to Daniel Nicolai)
   - private/local/README.md
     - Improved instructions on how to use private/local directory for packages
       (thanks to Daniel Nicolai)
+  - layers/+lang/elm/README.org
+    - Corrected typo in description of elm-reactor (thanks to Tanya Bouman)
   - layers/+lang/python/README.org
     - Corrected typo in python language server install command (thanks to Zach
       Pearson)

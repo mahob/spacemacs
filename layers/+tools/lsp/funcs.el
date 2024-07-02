@@ -1,6 +1,6 @@
 ;;; funcs.el --- Language Server Protocol Layer functions file for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Fangrui Song <i@maskray.me>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -75,9 +75,9 @@
 (defun spacemacs/lsp-bind-keys ()
   "Define key bindings for the lsp minor mode."
   (cl-ecase lsp-navigation
-    ('simple (spacemacs//lsp-bind-simple-navigation-functions "g"))
-    ('peek (spacemacs//lsp-bind-peek-navigation-functions "g"))
-    ('both
+    (simple (spacemacs//lsp-bind-simple-navigation-functions "g"))
+    (peek (spacemacs//lsp-bind-peek-navigation-functions "g"))
+    (both
      (spacemacs//lsp-bind-simple-navigation-functions "g")
      (spacemacs//lsp-bind-peek-navigation-functions "G")))
 
@@ -154,6 +154,9 @@
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
       (concat prefix-char "s") #'lsp-ivy-workspace-symbol
       (concat prefix-char "S") #'lsp-ivy-global-workspace-symbol))
+   ((configuration-layer/package-usedp 'consult-lsp)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
+      (concat prefix-char "s") #'consult-lsp-symbols))
    (t (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
         (concat prefix-char "s") #'lsp-ui-find-workspace-symbol))))
 
@@ -183,21 +186,21 @@ KEY is a string corresponding to a key sequence
 KIND is a quoted symbol corresponding to an extension defined using
 `lsp-define-extensions'."
   (cl-ecase lsp-navigation
-    ('simple (spacemacs/set-leader-keys-for-major-mode mode
-               (concat "g" key)
-               (spacemacs//lsp-extension-name
-                layer-name backend-name "find" kind)))
-    ('peek (spacemacs/set-leader-keys-for-major-mode mode
-             (concat "g" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "peek" kind)))
-    ('both (spacemacs/set-leader-keys-for-major-mode mode
-             (concat "g" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "find" kind)
-             (concat "G" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "peek" kind)))))
+    (simple (spacemacs/set-leader-keys-for-major-mode mode
+              (concat "g" key)
+              (spacemacs//lsp-extension-name
+               layer-name backend-name "find" kind)))
+    (peek (spacemacs/set-leader-keys-for-major-mode mode
+            (concat "g" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "peek" kind)))
+    (both (spacemacs/set-leader-keys-for-major-mode mode
+            (concat "g" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "find" kind)
+            (concat "G" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "peek" kind)))))
 
 (defun spacemacs/lsp-bind-extensions-for-mode (mode
                                                layer-name
@@ -319,7 +322,7 @@ EXTRA is an additional parameter that's passed to the LSP function"
   (mapcar 'lsp--client-server-id (mapcar 'lsp--workspace-client (lsp-workspaces))))
 
 
-;; ivy integration
+;; avy integration
 
 (defun spacemacs//lsp-avy-document-symbol (all)
   (interactive)
@@ -340,7 +343,9 @@ EXTRA is an additional parameter that's passed to the LSP function"
                                  :startLine ,start-line :endLine ,end-line)))
                for range = (if ccls
                                loc
-                             (->> loc (gethash "location") (gethash "range")))
+                             (if (gethash "location" loc)
+                                 (->> loc (gethash "location") (gethash "range"))
+                               (->> loc (gethash "range"))))
                for range_start = (gethash "start" range)
                for range_end = (gethash "end" range)
                for l0 = (gethash "line" range_start)

@@ -1,6 +1,6 @@
 ;;; packages.el --- Themes Mega-Pack Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -42,17 +42,17 @@
     color-theme-sanityinc-tomorrow
     cyberpunk-theme
     dakrone-theme
-    darkburn-theme
     darkmine-theme
     darkokai-theme
     darktooth-theme
     django-theme
     doom-themes
     dracula-theme
+    ef-themes
     espresso-theme
     exotica-theme
-    eziam-theme
-    farmhouse-theme
+    eziam-themes
+    farmhouse-themes
     flatland-theme
     flatui-theme
     gandalf-theme
@@ -71,7 +71,7 @@
     light-soap-theme
     lush-theme
     madhat2r-theme
-    majapahit-theme
+    majapahit-themes
     material-theme
     minimal-theme
     modus-themes
