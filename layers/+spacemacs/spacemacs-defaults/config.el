@@ -1,6 +1,6 @@
-;;; config.el --- Spacemacs Defaults Layer configuration File
+;;; config.el --- Spacemacs Defaults Layer configuration File  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -255,6 +255,7 @@ variables (see `savehist-mode' and `savehist-additional-variables')."
 
 ;; cache files
 (setq tramp-persistency-file-name (concat spacemacs-cache-directory "tramp"))
+(setq request-storage-directory (concat spacemacs-cache-directory "request/"))
 
 ;; seems pointless to warn. There's always undo.
 (put 'narrow-to-region 'disabled nil)

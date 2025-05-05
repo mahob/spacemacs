@@ -838,18 +838,16 @@ Features:
   - cus-edit
   - dired
   - dired-x
-  - display-line-numbers (only in Emacs 26.x and newer)
+  - display-line-numbers
   - electric-indent-mode
-  - easypg
   - ediff
   - eldoc
   - hi-lock
+  - image-dired
   - image-mode
   - imenu
-  - occur-mode
   - package-menu
   - page-break-lines
-  - proced
   - process-menu
   - quickrun
   - recentf
@@ -862,6 +860,7 @@ Features:
   - visual-line-mode
   - whitespace
   - winner
+  - xref
   - zone
 
 ** Spacemacs-editing
@@ -2229,7 +2228,7 @@ Features:
 - Test Runners using [[https://github.com/ionrock/pytest-el][pytest]] or [[https://github.com/syl20bnr/nose.el][nose.el]]
 - Virtual Environment using [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] and [[https://github.com/yyuu/pyenv][pyenv]] as well as [[https://github.com/pypa/pipenv][pipenv]] and [[https://github.com/galaunay/poetry.el][poetry]]
 - semantic mode is enabled
-- PEP8 compliant formatting via [[https://github.com/google/yapf][YAPF]] or [[https://github.com/ambv/black][black]]
+- PEP8 compliant formatting via [[https://github.com/google/yapf][YAPF]], [[https://github.com/ambv/black][black]], or [[https://github.com/astral-sh/ruff][ruff]]
 - PEP8 checks with [[https://pypi.python.org/pypi/flake8][flake8]] or [[https://pypi.python.org/pypi/pylint/1.6.4][pylint]]
 - Suppression of unused import with [[https://github.com/myint/autoflake][autoflake]]
 - Use the ~%~ key to jump between blocks with [[https://github.com/redguardtoo/evil-matchit][evil-matchit]]
@@ -3384,10 +3383,12 @@ Features:
 ** GitHub Copilot
 [[file:+web-services/github-copilot/README.org][+web-services/github-copilot/README.org]]
 
-This layer enables usage of [[https://github.com/features/copilot][GitHub Copilot]] in Spacemacs using [[https://github.com/copilot-emacs/copilot.el][copilot.el]].
+This layer enables usage of [[https://github.com/features/copilot][GitHub Copilot]] in Spacemacs.
 
 Features:
-- Provide access to ai powered code completions powered by [[https://github.com/features/copilot][GitHub Copilot]]
+- Ai powered code completions using [[https://github.com/copilot-emacs/copilot.el][copilot.el]]
+- Ai chat interactions using [[https://github.com/chep/copilot-chat.el][copilot-chat.el]]
+- Automatic generation of git commit messages using [[https://github.com/chep/copilot-chat.el][copilot-chat.el]]
 
 ** Hacker News
 [[file:+web-services/hackernews/README.org][+web-services/hackernews/README.org]]

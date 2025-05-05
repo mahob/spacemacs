@@ -1,6 +1,6 @@
-;;; config.el --- Version Control configuration File for Spacemacs
+;;; config.el --- Version Control configuration File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -30,7 +30,7 @@
 
 (spacemacs|defc version-control-diff-tool 'diff-hl
   "Options are `diff-hl' (the preferred choice) or `git-gutter' to show
-version-control markers."
+version-control markers, `nil' to disable this feature."
   '(choice (const diff-hl) (const git-gutter) nil))
 
 (spacemacs|defc version-control-diff-side 'right

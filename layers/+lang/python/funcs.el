@@ -1,6 +1,6 @@
-;;; funcs.el --- Python Layer functions File for Spacemacs
+;;; funcs.el --- Python Layer functions File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -143,7 +143,7 @@ compatibility."
           (not (executable-find "pyenv")))      ; or no pyenv
       (cl-some (lambda (dir)
                  (let ((exec-path (list dir)))
-                   (cl-some 'executable-find commands)))
+                   (cl-find-if 'executable-find commands)))
                exec-path)
 
     (let ((pyenv-vers (split-string (string-trim (shell-command-to-string "pyenv version-name")) ":")))
@@ -154,7 +154,7 @@ compatibility."
            (cl-some
             (lambda (ver)
               (cond ((string-match ver pyenv-cmd) pyenv-cmd)
-                    ((string-match ver "system") (executable-find cmd))))
+                    ((string-match ver "system") (and (executable-find cmd) cmd))))
             pyenv-vers)))
        commands))))
 
@@ -378,6 +378,7 @@ Bind formatter to '==' for LSP and '='for all other backends."
   (pcase python-formatter
     ('yapf (yapfify-buffer))
     ('black (blacken-buffer))
+    ('ruff (ruff-format-buffer))
     ('lsp (lsp-format-buffer))
     (code (message "Unknown formatter: %S" code))))
 

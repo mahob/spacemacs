@@ -1,6 +1,6 @@
-;;; packages.el --- Auto-completion Layer packages File for Spacemacs
+;;; packages.el --- Auto-completion Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -77,7 +77,7 @@
     (add-to-list 'completion-styles 'initials t)
     (define-key ac-completing-map (kbd "C-j") 'ac-next)
     (define-key ac-completing-map (kbd "C-k") 'ac-previous)
-    (define-key ac-completing-map (kbd "<S-tab>") 'ac-previous)
+    (define-key ac-completing-map (kbd "S-<tab>") 'ac-previous)
     (spacemacs|diminish auto-complete-mode " ⓐ" " a")))
 
 (defun auto-completion/init-auto-yasnippet ()
@@ -322,7 +322,6 @@
      'spacemacs/force-yasnippet-off '(term-mode-hook
                                       shell-mode-hook
                                       eshell-mode-hook))
-    (spacemacs|require-when-dumping 'yasnippet)
     (spacemacs/add-to-hooks 'spacemacs/load-yasnippet '(prog-mode-hook
                                                         markdown-mode-hook
                                                         org-mode-hook))

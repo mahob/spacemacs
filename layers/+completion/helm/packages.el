@@ -1,6 +1,6 @@
-;;; packages.el --- Helm Layer packages File
+;;; packages.el --- Helm Layer packages File  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -51,7 +51,7 @@
 ;; Initialization of packages
 (defun helm/init-ace-jump-helm-line ()
   (use-package ace-jump-helm-line
-    :defer (spacemacs/defer)
+    :defer t
     :init
     (with-eval-after-load 'helm
       (define-key helm-map (kbd "C-q") 'ace-jump-helm-line))))
@@ -75,7 +75,7 @@
 
 (defun helm/init-helm ()
   (use-package helm
-    :defer (spacemacs/defer)
+    :defer t
     :init
     (spacemacs|diminish helm-ff-cache-mode)
     (spacemacs|add-transient-hook completing-read
@@ -98,8 +98,8 @@
     (global-set-key (kbd "C-x C-f") 'spacemacs/helm-find-files)
     (global-set-key (kbd "C-x b") 'helm-buffers-list)
     ;; use helm to switch last(/previous) visited buffers with C(-S)-tab
-    (evil-global-set-key 'motion (kbd "<C-tab>") 'helm-buffers-list)
-    (evil-global-set-key 'motion (kbd "<C-iso-lefttab>") 'helm-buffers-list)
+    (evil-global-set-key 'motion (kbd "C-<tab>") 'helm-buffers-list)
+    (evil-global-set-key 'motion (kbd "C-<iso-lefttab>") 'helm-buffers-list)
     ;; use helm everywhere
     (spacemacs||set-helm-key "<f1>" helm-apropos)
     (spacemacs||set-helm-key "a'"   helm-available-repls)
@@ -123,13 +123,21 @@
     (spacemacs||set-helm-key "ry"   helm-show-kill-ring)
     (spacemacs||set-helm-key "sl"   spacemacs/resume-last-search-buffer)
     (spacemacs||set-helm-key "sj"   spacemacs/helm-jump-in-buffer)
+    (evil-add-command-properties 'spacemacs/helm-jump-in-buffer :jump t)
+    (evil-add-command-properties 'lazy-helm/spacemacs/helm-jump-in-buffer :jump t)
     ;; search with grep
     (spacemacs||set-helm-key "sgb"  spacemacs/helm-buffers-do-grep)
-    (spacemacs||set-helm-key "sgB"  spacemacs/helm-buffers-do-grep-region-or-symbol)
+    (spacemacs||set-helm-key
+     "sgB" ("grep-search buffers w/ input" .
+            spacemacs/helm-buffers-do-grep-region-or-symbol))
     (spacemacs||set-helm-key "sgf"  spacemacs/helm-files-do-grep)
-    (spacemacs||set-helm-key "sgF"  spacemacs/helm-files-do-grep-region-or-symbol)
+    (spacemacs||set-helm-key
+     "sgF" ("grep-search files w/ input" .
+            spacemacs/helm-files-do-grep-region-or-symbol))
     (spacemacs||set-helm-key "sgg"  spacemacs/helm-file-do-grep)
-    (spacemacs||set-helm-key "sgG"  spacemacs/helm-file-do-grep-region-or-symbol)
+    (spacemacs||set-helm-key
+     "sgG" ("grep-search file w/ input" .
+            spacemacs/helm-file-do-grep-region-or-symbol))
     ;; various key bindings
     (spacemacs||set-helm-key "fel" helm-locate-library)
     (spacemacs||set-helm-key "hdx" spacemacs/describe-ex-command)
@@ -198,8 +206,8 @@
     (setq helm-ff-allow-non-existing-file-at-point t)
 
     ;; use helm to switch last(/previous) visited buffers with C(-S)-tab
-    (define-key helm-map (kbd "<C-tab>") 'helm-follow-action-forward)
-    (define-key helm-map (kbd "<C-iso-lefttab>") 'helm-follow-action-backward)
+    (define-key helm-map (kbd "C-<tab>") 'helm-follow-action-forward)
+    (define-key helm-map (kbd "C-<iso-lefttab>") 'helm-follow-action-backward)
     ;; alter helm-bookmark key bindings to be simpler
     (defun simpler-helm-bookmark-keybindings ()
       (define-key helm-bookmark-map (kbd "C-d") 'helm-bookmark-run-delete)
@@ -221,12 +229,12 @@
 
 (defun helm/init-helm-comint ()
   (use-package helm-comint
-    :defer (spacemacs/defer)
+    :defer t
     :after helm))
 
 (defun helm/init-helm-ag ()
   (use-package helm-ag
-    :defer (spacemacs/defer)
+    :defer t
     :init
     (setq helm-ag-use-grep-ignore-list t)
     ;; This overrides the default C-s action in helm-projectile-switch-project
@@ -250,15 +258,20 @@
       "s`"  'helm-ag-pop-stack
       ;; opened buffers scope
       "sb"  'spacemacs/helm-buffers-smart-do-search
-      "sB"  'spacemacs/helm-buffers-smart-do-search-region-or-symbol
+      "sB"  '("smart-search buffers w/ input" .
+              spacemacs/helm-buffers-smart-do-search-region-or-symbol)
       "sab" 'helm-do-ag-buffers
-      "saB" 'spacemacs/helm-buffers-do-ag-region-or-symbol
+      "saB" '("ag-search buffers w/ input" .
+              spacemacs/helm-buffers-do-ag-region-or-symbol)
       "skb" 'spacemacs/helm-buffers-do-ack
-      "skB" 'spacemacs/helm-buffers-do-ack-region-or-symbol
+      "skB" '("ack-search buffers w/ input" .
+              spacemacs/helm-buffers-do-ack-region-or-symbol)
       "srb" 'spacemacs/helm-buffers-do-rg
-      "srB" 'spacemacs/helm-buffers-do-rg-region-or-symbol
+      "srB" '("rg-search buffers w/ input" .
+              spacemacs/helm-buffers-do-rg-region-or-symbol)
       "stb" 'spacemacs/helm-buffers-do-pt
-      "stB" 'spacemacs/helm-buffers-do-pt-region-or-symbol
+      "stB" '("pt-search buffers w/ input" .
+              spacemacs/helm-buffers-do-pt-region-or-symbol)
       ;; current file scope
       "ss"  'spacemacs/helm-file-smart-do-search
       "sS"  'spacemacs/helm-file-smart-do-search-region-or-symbol
@@ -266,18 +279,24 @@
       "saA" 'spacemacs/helm-file-do-ag-region-or-symbol
       ;; files scope
       "sf"  'spacemacs/helm-files-smart-do-search
-      "sF"  'spacemacs/helm-files-smart-do-search-region-or-symbol
+      "sF"  '("smart-search files w/ input" .
+              spacemacs/helm-files-smart-do-search-region-or-symbol)
       "saf" 'helm-do-ag
-      "saF" 'spacemacs/helm-files-do-ag-region-or-symbol
+      "saF" '("ag-search files w/ input" .
+              spacemacs/helm-files-do-ag-region-or-symbol)
       "skf" 'spacemacs/helm-files-do-ack
-      "skF" 'spacemacs/helm-files-do-ack-region-or-symbol
+      "skF" '("ack-search files w/ input" .
+              spacemacs/helm-files-do-ack-region-or-symbol)
       "srf" 'spacemacs/helm-files-do-rg
-      "srF" 'spacemacs/helm-files-do-rg-region-or-symbol
+      "srF" '("rg-search files w/ input" .
+              spacemacs/helm-files-do-rg-region-or-symbol)
       "stf" 'spacemacs/helm-files-do-pt
-      "stF" 'spacemacs/helm-files-do-pt-region-or-symbol
+      "stF" '("pt-search files w/ input" .
+              spacemacs/helm-files-do-pt-region-or-symbol)
       ;; current dir scope
       "sd"  'spacemacs/helm-dir-smart-do-search
-      "sD"  'spacemacs/helm-dir-smart-do-search-region-or-symbol
+      "sD"  '("smart-search dir w/ input" .
+              spacemacs/helm-dir-smart-do-search-region-or-symbol)
       "sad" 'spacemacs/helm-dir-do-ag
       "saD" 'spacemacs/helm-dir-do-ag-region-or-symbol
       "skd" 'spacemacs/helm-dir-do-ack
@@ -290,15 +309,20 @@
       "/"   'spacemacs/helm-project-smart-do-search
       "*"   'spacemacs/helm-project-smart-do-search-region-or-symbol
       "sp"  'spacemacs/helm-project-smart-do-search
-      "sP"  'spacemacs/helm-project-smart-do-search-region-or-symbol
+      "sP"  '("smart-search project w/ input" .
+              spacemacs/helm-project-smart-do-search-region-or-symbol)
       "sap" 'spacemacs/helm-project-do-ag
-      "saP" 'spacemacs/helm-project-do-ag-region-or-symbol
+      "saP" '("ag-search project w/ input" .
+              spacemacs/helm-project-do-ag-region-or-symbol)
       "skp" 'spacemacs/helm-project-do-ack
-      "skP" 'spacemacs/helm-project-do-ack-region-or-symbol
+      "skP" '("ack-search project w/ input" .
+              spacemacs/helm-project-do-ack-region-or-symbol)
       "srp" 'spacemacs/helm-project-do-rg
-      "srP" 'spacemacs/helm-project-do-rg-region-or-symbol
+      "srP" '("rg-search project w/ input" .
+              spacemacs/helm-project-do-rg-region-or-symbol)
       "stp" 'spacemacs/helm-project-do-pt
-      "stP" 'spacemacs/helm-project-do-pt-region-or-symbol)
+      "stP" '("pt-search project w/ input" .
+              spacemacs/helm-project-do-pt-region-or-symbol))
     :config
     (advice-add 'helm-ag--save-results :after 'spacemacs//gne-init-helm-ag)
     (evil-define-key 'normal helm-ag-map
@@ -315,7 +339,7 @@
 
 (defun helm/init-helm-descbinds ()
   (use-package helm-descbinds
-    :defer (spacemacs/defer)
+    :defer t
     :init
     (setq helm-descbinds-window-style 'split
           helm-descbinds-disable-which-key nil)
@@ -366,7 +390,7 @@
 (defun helm/init-helm-org ()
   (use-package helm-org
     :commands (helm-org-in-buffer-headings)
-    :defer (spacemacs/defer)))
+    :defer t))
 
 (defun helm/init-helm-posframe ()
   (use-package helm-posframe
@@ -443,7 +467,7 @@
 
 (defun helm/init-helm-swoop ()
   (use-package helm-swoop
-    :defer (spacemacs/defer)
+    :defer t
     :init
     (setq helm-swoop-split-with-multiple-windows t
           helm-swoop-split-direction 'split-window-vertically
