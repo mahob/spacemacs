@@ -345,7 +345,7 @@ is ignored."
 
 (cl-defmethod cfgl-package-distant-p ((pkg cfgl-package))
   "Return non-nil if PKG is a distant package (i.e. not built-in Emacs)."
-  (and (not (memq (oref pkg location) '(built-in site local)))
+  (and (not (memq (oref pkg location) '(built-in local)))
        (not (stringp (oref pkg location)))))
 
 (cl-defmethod cfgl-package-get-safe-owner ((pkg cfgl-package))
@@ -1269,7 +1269,7 @@ USEDP if non-nil indicates that made packages are used packages."
 
 (defun configuration-layer//filter-distant-packages
     (packages usedp &optional predicate)
-  "Return the distant packages (ie to be intalled).
+  "Return the distant packages (i.e., to be installed).
 If USEDP is non nil then returns only the used packages; if it is nil then
 return both used and unused packages.
 PREDICATE is an additional expression that eval to a boolean."
@@ -1685,6 +1685,10 @@ RNAME is the name symbol of another existing layer."
     (unless (package-installed-p pkg-name min-version)
       (condition-case-unless-debug err
           (cond
+           ((eq 'site location)
+            (configuration-layer//error
+             "Cannot install package `%s' from ELPA.  It is a site package and must be installed with your Emacs distribution"
+             pkg-name))
            ((or (null pkg) (eq 'elpa location))
             (configuration-layer//install-from-elpa pkg-name)
             (when pkg (oset pkg lazy-install nil)))
@@ -2163,7 +2167,7 @@ in the back-up directory."
          (upgraded-count 0)
          (upgrade-count (length update-packages)))
     (spacemacs-buffer/append
-       "--> performing backup of package(s) to update...\n" t)
+     "--> performing backup of package(s) to update...\n" t)
     (spacemacs//redisplay)
     (dolist (pkg update-packages)
       (unless (memq pkg dotspacemacs-frozen-packages)
@@ -2323,9 +2327,10 @@ depends on it."
 
 (defun configuration-layer//get-orphan-packages (dist-pkgs implicit-pkgs dependencies)
   "Return orphan packages."
-  (cl-remove-if-not (lambda (imp-pkg)
-                      (configuration-layer//package-orphan-p imp-pkg dist-pkgs dependencies))
-                    implicit-pkgs))
+  (mapcan (lambda (imp-pkg)
+            (and (configuration-layer//package-orphan-p imp-pkg dist-pkgs dependencies)
+                 (list (car (alist-get imp-pkg package-alist)))))
+          implicit-pkgs))
 
 (defun configuration-layer//package-orphan-p (pkg-name dist-pkgs dependencies)
   "Return non-nil if PKG-NAME is the name of an orphan package."
@@ -2376,34 +2381,39 @@ depends on it."
         (expand-file-name
          (package-desc-dir pkg-desc)))))
 
-(defun configuration-layer//package-delete (pkg-name)
-  "Delete package with name PKG-NAME."
-  (if-let* ((pkg (car (alist-get pkg-name package-alist))))
-      ;; add force flag to ignore dependency checks in Emacs25
-      (if (configuration-layer//system-package-p pkg)
-          (message "Would have removed package %s but this is a system package so it has not been changed." pkg-name)
-        (package-delete pkg t t))
-    (message "Can't remove package %s since it isn't installed." pkg-name)))
+(defun configuration-layer//package-delete (pkg-desc)
+  "Delete package PKG-DESC."
+  ;; add force flag to ignore dependency checks in Emacs25
+  (if (configuration-layer//system-package-p pkg-desc)
+      (message "Would have removed package %s but this is a system package so it has not been changed."
+               (package-desc-name pkg-desc))
+    (package-delete pkg-desc t t)))
 
-(defun configuration-layer/delete-orphan-packages (packages)
+(defun configuration-layer/delete-orphan-packages (packages &optional include-system)
   "Delete PACKAGES if they are orphan.
 
-When called interactively, delete all orphan packages."
-  (interactive (list (configuration-layer/get-packages-list)))
+When called interactively, delete all orphan packages.
+
+If INCLUDE-SYSTEM is non-nil (including when called interactively),
+alert the user about unused system packages that are not used by
+Spacemacs.  (These are excluded by default to avoid bothering users
+about unused packages that are provided by their site, which they may
+have no need or power to remove)."
+  (interactive (list (configuration-layer/get-packages-list) t))
   (let* ((dependencies
           (configuration-layer//get-packages-downstream-dependencies-from-alist))
          (implicit-packages
           (configuration-layer//get-implicit-packages-from-alist
            packages))
-         (orphans (configuration-layer//get-orphan-packages
-                   packages
-                   implicit-packages
-                   dependencies))
+         (orphans
+          (seq-filter (if include-system #'always
+                        (lambda (p) (not (configuration-layer//system-package-p p))))
+                      (configuration-layer//get-orphan-packages
+                       packages
+                       implicit-packages
+                       dependencies)))
          (orphans-count (length orphans))
          deleted-count)
-    ;; (message "dependencies: %s" dependencies)
-    ;; (message "implicit: %s" implicit-packages)
-    ;; (message "orphans: %s" orphans)
     (if orphans
         (progn
           (spacemacs-buffer/set-mode-line "Uninstalling unused packages..." t)
@@ -2415,7 +2425,7 @@ When called interactively, delete all orphan packages."
             (setq deleted-count (1+ deleted-count))
             (spacemacs-buffer/replace-last-line
              (format "--> deleting %s... [%s/%s]"
-                     orphan
+                     (package-desc-name orphan)
                      deleted-count
                      orphans-count) t)
             (configuration-layer//package-delete orphan)
