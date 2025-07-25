@@ -1,6 +1,6 @@
-;;; packages.el --- Language Server Protocol Layer packages file for Spacemacs
+;;; packages.el --- Language Server Protocol Layer packages file for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Fangrui Song <i@maskray.me>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -30,7 +30,15 @@
     (lsp-ivy :requires ivy)
     (lsp-treemacs :requires treemacs)
     (lsp-origami :requires lsp-mode)
+    (lsp-sonarlint :toggle lsp-sonarlint)
     popwin))
+
+(defun lsp/init-lsp-sonarlint ()
+  (use-package lsp-sonarlint
+    :init
+    (setq
+     lsp-sonarlint-auto-download t)
+    :defer t))
 
 (defun lsp/init-lsp-mode ()
   (use-package lsp-mode
@@ -40,33 +48,38 @@
           lsp-session-file (concat lsp-server-install-dir (file-name-nondirectory ".lsp-session-v1"))
           lsp-eslint-library-choices-file (concat lsp-server-install-dir ".lsp-eslint-choices")
           lsp-yaml-schema-store-local-db (concat lsp-server-install-dir "lsp-yaml-schemas.json")
-          lsp-vetur-global-snippets-dir (concat spacemacs-start-directory "snippets/vetur"))
+          lsp-vetur-global-snippets-dir (concat spacemacs-start-directory "snippets/vetur")
+          lsp-ui-sideline-diagnostic-max-lines 20
+          lsp-imenu-index-function #'lsp-imenu-create-categorized-index)
     ;; If you find something else should be ignored, you could also set them here
     :config
-    (progn
-      (if lsp-use-upstream-bindings
-          (spacemacs/lsp-bind-upstream-keys)
-        (spacemacs/lsp-bind-keys))
-      (setq lsp-prefer-capf t)
-      (add-hook 'lsp-after-open-hook (lambda ()
-                                       "Setup xref jump handler"
-                                       (spacemacs//setup-lsp-jump-handler))))))
+    (if lsp-use-upstream-bindings
+        (spacemacs/lsp-bind-upstream-keys)
+      (spacemacs/lsp-bind-keys))
+    (setq lsp-completion-provider (if (or (equal :all lsp-manage-backends-manually)
+                                          (member major-mode lsp-manage-backends-manually))
+                                      :none
+                                    :capf))
+    ;; This sets the lsp indentation for all modes derived from web-mode.
+    (add-to-list 'lsp--formatting-indent-alist '(web-mode . web-mode-markup-indent-offset))
+    (add-hook 'lsp-after-open-hook (lambda ()
+                                     "Setup xref jump handler"
+                                     (spacemacs//setup-lsp-jump-handler)))))
 
 (defun lsp/init-lsp-ui ()
   (use-package lsp-ui
     :defer t
     :config
-    (progn
-      (if lsp-remap-xref-keybindings
-          (progn (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-                 (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
+    (if lsp-remap-xref-keybindings
+        (progn (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+               (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
 
-      (spacemacs/lsp-define-key
-       lsp-ui-peek-mode-map
-       "h" #'lsp-ui-peek--select-prev-file
-       "j" #'lsp-ui-peek--select-next
-       "k" #'lsp-ui-peek--select-prev
-       "l" #'lsp-ui-peek--select-next-file))))
+    (spacemacs/lsp-define-key
+     lsp-ui-peek-mode-map
+     "h" #'lsp-ui-peek--select-prev-file
+     "j" #'lsp-ui-peek--select-next
+     "k" #'lsp-ui-peek--select-prev
+     "l" #'lsp-ui-peek--select-next-file)))
 
 (defun lsp/init-helm-lsp ()
   (use-package helm-lsp :defer t))
@@ -77,9 +90,7 @@
 (defun lsp/init-consult-lsp ()
   (use-package consult-lsp
     :defer t
-    :after (lsp-mode)
-    :config
-     (consult-lsp-marginalia-mode 1)))
+    :after (lsp-mode)))
 
 (defun lsp/init-lsp-treemacs ()
   (use-package lsp-treemacs :defer t))

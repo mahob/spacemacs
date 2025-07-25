@@ -1,6 +1,6 @@
-;;; packages.el --- Passwords Layer packages File for Spacemacs
+;;; packages.el --- Passwords Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Andrew Oppenlander <andrew.oppenlander@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -43,33 +43,31 @@
   (use-package password-store
     :defer t
     :init
-    (progn
-      (spacemacs/declare-prefix "atP" "pass")
-      (spacemacs/set-leader-keys
-        "atPy" 'password-store-copy
-        "atPg" 'password-store-generate
-        "atPi" 'password-store-insert
-        "atPc" 'password-store-edit
-        "atPr" 'password-store-rename
-        "atPd" 'password-store-remove
-        "atPD" 'password-store-clear
-        "atPI" 'password-store-init
-        "atPw" 'password-store-url
-        "atP?" 'spacemacs/pass-describe
-        "atPY" 'spacemacs/pass-copy-and-describe))))
+    (spacemacs/declare-prefix "atP" "pass")
+    (spacemacs/set-leader-keys
+      "atPy" 'password-store-copy
+      "atPg" 'password-store-generate
+      "atPi" 'password-store-insert
+      "atPc" 'password-store-edit
+      "atPr" 'password-store-rename
+      "atPd" 'password-store-remove
+      "atPD" 'password-store-clear
+      "atPI" 'password-store-init
+      "atPw" 'password-store-url
+      "atP?" 'spacemacs/pass-describe
+      "atPY" 'spacemacs/pass-copy-and-describe)))
 
 (defun pass/init-password-store-otp ()
   (use-package password-store-otp
     :defer t
     :init
-    (progn
-      (spacemacs/declare-prefix "atPo" "otp")
-      (spacemacs/set-leader-keys
-        "atPoy" 'password-store-otp-token-copy
-        "atPoY" 'password-store-otp-uri-copy
-        "atPoi" 'password-store-otp-insert
-        "atPoa" 'password-store-otp-append
-        "atPoA" 'password-store-otp-append-from-image))))
+    (spacemacs/declare-prefix "atPo" "otp")
+    (spacemacs/set-leader-keys
+      "atPoy" 'password-store-otp-token-copy
+      "atPoY" 'password-store-otp-uri-copy
+      "atPoi" 'password-store-otp-insert
+      "atPoa" 'password-store-otp-append
+      "atPoA" 'password-store-otp-append-from-image)))
 
 (defun pass/init-auth-source-pass ()
   (use-package auth-source-pass

@@ -1,6 +1,6 @@
-;;; packages.el --- evil-commentary Layer packages File for Spacemacs
+;;; packages.el --- evil-commentary Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -29,7 +29,6 @@
 (defun evil-commentary/init-evil-commentary ()
   (use-package evil-commentary
     :init
-    (progn
-      (evil-commentary-mode)
-      (spacemacs/set-leader-keys ";" 'evil-commentary))
+    (evil-commentary-mode)
+    (spacemacs/set-leader-keys ";" 'evil-commentary)
     :config (spacemacs|hide-lighter evil-commentary-mode)))

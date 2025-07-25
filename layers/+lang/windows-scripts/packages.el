@@ -1,6 +1,6 @@
-;;; packages.el --- Windows Scripts Layer packages File for Spacemacs
+;;; packages.el --- Windows Scripts Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -25,9 +25,7 @@
   '(
     (bat-mode :location built-in)
     bmx-mode
-    (counsel-gtags :if (configuration-layer/package-used-p 'counsel))
     ggtags
-    (helm-gtags :if (configuration-layer/package-used-p 'helm))
     powershell))
 
 (defun windows-scripts/init-bat-mode()
@@ -36,10 +34,9 @@
     :mode (("\\.bat\\'" . bat-mode)
            ("\\.cmd\\'" . bat-mode))
     :init
-    (progn
-      (spacemacs/declare-prefix-for-mode 'bat-mode "me" "eval")
-      (spacemacs/declare-prefix-for-mode 'bat-mode "mh" "help")
-      (spacemacs/declare-prefix-for-mode 'bat-mode "mi" "insert"))
+    (spacemacs/declare-prefix-for-mode 'bat-mode "me" "eval")
+    (spacemacs/declare-prefix-for-mode 'bat-mode "mh" "help")
+    (spacemacs/declare-prefix-for-mode 'bat-mode "mi" "insert")
     :spacebind
     (:major
      (bat-mode
@@ -84,26 +81,19 @@
 (defun windows-scripts/post-init-ggtags ()
   (add-hook 'bat-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun windows-scripts/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'bat-mode))
-
-(defun windows-scripts/post-init-helm-gtags ()
-  (spacemacs/helm-gtags-define-keys-for-mode 'bat-mode))
-
 (defun windows-scripts/init-powershell ()
   (use-package powershell
     :mode (("\\.ps1\\'"  . powershell-mode)
            ("\\.psm1\\'" . powershell-mode))
     :defer t
     :init
-    (progn
-      (defun powershell/define-text-objects ()
-        (spacemacs|define-text-object "$" "dollarparen" "$(" ")"))
-      (add-hook 'powershell-mode-hook 'powershell/define-text-objects)
-      (spacemacs/set-leader-keys
-        "atsp" 'powershell)
-      (spacemacs/set-leader-keys-for-major-mode 'powershell-mode
-        "rr" 'powershell-regexp-to-regex))))
+    (defun powershell/define-text-objects ()
+      (spacemacs|define-text-object "$" "dollarparen" "$(" ")"))
+    (add-hook 'powershell-mode-hook 'powershell/define-text-objects)
+    (spacemacs/set-leader-keys
+      "atsp" 'powershell)
+    (spacemacs/set-leader-keys-for-major-mode 'powershell-mode
+      "rr" 'powershell-regexp-to-regex)))
 ;; TODO
 ;; - split out powershell
 ;; - get help output with mgg (Get-Help) or Get-Help -online

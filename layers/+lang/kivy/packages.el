@@ -1,6 +1,6 @@
-;;; packages.el --- kivy layer packages file for Spacemacs.
+;;; packages.el --- kivy layer packages file for Spacemacs.  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Ryota Kayanuma <picosushi12@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -32,8 +32,7 @@
   (use-package kivy-mode
     :defer t
     :init
-    (progn
-      ;; config goes here.
-      )))
+    ;; config goes here.
+    ))
 
 ;;; packages.el ends here

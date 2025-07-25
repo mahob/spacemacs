@@ -1,6 +1,6 @@
-;;; funcs.el --- ibuffer Layer functions File for Spacemacs
+;;; funcs.el --- ibuffer Layer functions File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Aleksandr Guljajev <gulj.aleks@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -51,7 +51,7 @@
           (list (cons "Home"
                       (spacemacs//ibuffer-get-major-modes-ibuff-rules-list
                        (cl-set-difference
-                        (remove-duplicates
+                        (cl-remove-duplicates
                          (spacemacs//ibuffer-get-major-modes-list))
                         ignore-modes) '())))))
     (setq ibuffer-saved-filter-groups cur-bufs)

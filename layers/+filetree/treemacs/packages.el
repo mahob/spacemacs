@@ -1,6 +1,6 @@
-;;; packages.el --- Treemacs Layer packages File for Spacemacs
+;;; packages.el --- Treemacs Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;;         Hong Xu <hong@topbug.net>
@@ -49,52 +49,49 @@
                treemacs-current-visibility)
     :defer t
     :init
-    (progn
-      (setq treemacs-follow-after-init t)
-      (add-hook 'treemacs-mode-hook
-                #'spacemacs/treemacs-setup-width-lock)
-      (spacemacs|spacebind
-       "Files manipulation."
-       :global
-       (("f" "Files"
-         ("t" treemacs "File tree")
-         ("B" treemacs-bookmark "Find bookmark in file tree")
-         ("T" treemacs-find-file "Focus current file in file tree")
-         ("M-t" treemacs-find-tag "Focus tag in file tree" ))
-        ("p" "Project"
-         ("t" spacemacs/treemacs-project-toggle "Open project in file tree"))))
-      (which-key-add-major-mode-key-based-replacements 'treemacs-mode
-        "c"         "treemacs-create"
-        "o"         "treemacs-visit-node"
-        "oa"        "treemacs-visit-node-ace"
-        "t"         "treemacs-toggles"
-        "y"         "treemacs-copy"
-        "C-c C-p"   "treemacs-projects"
-        "C-c C-p c" "treemacs-projects-collapse"))
+    (setq treemacs-follow-after-init t)
+    (add-hook 'treemacs-mode-hook
+              #'spacemacs/treemacs-setup-width-lock)
+    (spacemacs|spacebind
+     "Files manipulation."
+     :global
+     (("f" "Files"
+       ("t" treemacs "File tree")
+       ("B" treemacs-bookmark "Find bookmark in file tree")
+       ("T" treemacs-find-file "Focus current file in file tree")
+       ("M-t" treemacs-find-tag "Focus tag in file tree" ))
+      ("p" "Project"
+       ("t" spacemacs/treemacs-project-toggle "Open project in file tree"))))
+    (which-key-add-major-mode-key-based-replacements 'treemacs-mode
+      "c"         "treemacs-create"
+      "o"         "treemacs-visit-node"
+      "oa"        "treemacs-visit-node-ace"
+      "t"         "treemacs-toggles"
+      "y"         "treemacs-copy"
+      "C-c C-p"   "treemacs-projects"
+      "C-c C-p c" "treemacs-projects-collapse")
     :config
-    (progn
-      (spacemacs/define-evil-state-face "treemacs" "MediumPurple1")
-      ;; minor modes are enabled by default, so they must be explicitly
-      ;; turned off
-      (if (eq treemacs-use-follow-mode t)
-          (treemacs-follow-mode t)
-        (treemacs-follow-mode -1))
-      (if (eq treemacs-use-follow-mode 'tag)
-          (treemacs-tag-follow-mode t)
-        (treemacs-tag-follow-mode -1))
-      (if treemacs-use-filewatch-mode
-          (treemacs-filewatch-mode t)
-        (treemacs-filewatch-mode -1))
-      (if (memq treemacs-use-git-mode '(simple extended deferred))
-          (treemacs-git-mode treemacs-use-git-mode)
-        (treemacs-git-mode -1))
-      (add-to-list 'spacemacs-window-split-ignore-prefixes
-                   treemacs--buffer-name-prefix))))
+    (spacemacs/define-evil-state-face "treemacs" "MediumPurple1")
+    ;; minor modes are enabled by default, so they must be explicitly
+    ;; turned off
+    (if (eq treemacs-use-follow-mode t)
+        (treemacs-follow-mode t)
+      (treemacs-follow-mode -1))
+    (if (eq treemacs-use-follow-mode 'tag)
+        (treemacs-tag-follow-mode t)
+      (treemacs-tag-follow-mode -1))
+    (if treemacs-use-filewatch-mode
+        (treemacs-filewatch-mode t)
+      (treemacs-filewatch-mode -1))
+    (if (memq treemacs-use-git-mode '(simple extended deferred))
+        (treemacs-git-mode treemacs-use-git-mode)
+      (treemacs-git-mode -1))
+    (add-to-list 'spacemacs-window-split-ignore-prefixes
+                 treemacs--buffer-name-prefix)))
 
 (defun treemacs/init-treemacs-evil ()
   (use-package treemacs-evil
-    :after treemacs
-    :if (memq dotspacemacs-editing-style '(vim hybrid))))
+    :after treemacs))
 
 (defun treemacs/init-treemacs-projectile ()
   (use-package treemacs-projectile
@@ -114,7 +111,6 @@
 
 (defun treemacs/init-treemacs-all-the-icons ()
   (use-package treemacs-all-the-icons
-    :if treemacs-use-all-the-icons-theme
     :hook ((treemacs-mode dired-mode) . (lambda () (treemacs-load-theme 'all-the-icons)))))
 
 (defun treemacs/pre-init-winum ()
@@ -124,7 +120,7 @@
       (when (configuration-layer/package-used-p 'winum)
         ;; `0', `M-0' and `C-x w 0' are bound to `winum-select-window-0-or-10'
         (define-key winum-keymap
-          [remap winum-select-window-0-or-10] #'treemacs-select-window)
+                    [remap winum-select-window-0-or-10] #'treemacs-select-window)
         ;; replace the which-key name
         (push '((nil . "winum-select-window-0-or-10") .
                 (nil . "treemacs-select-window"))

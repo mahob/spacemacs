@@ -265,7 +265,7 @@ To map ~<Leader>~ key bindings, use the =spacemacs/set-leader-keys= function.
 #+BEGIN_SRC emacs-lisp
   (spacemacs/set-leader-keys key function) ; Syntax
   ;; Map killing a buffer to <Leader> b c
-  (spacemacs/set-leader-keys "bc" 'spacemacs/kill-this-buffer)
+  (spacemacs/set-leader-keys "bc" 'kill-current-buffer)
   ;; Map opening a link to <Leader> o l only in org-mode (works for any major-mode)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode
     "ol" 'org-open-at-point)
@@ -438,16 +438,14 @@ to using it:
   (use-package package-name
     :defer t
     :init
-    (progn
-      ;; Change some variables
-      (setq variable1 t variable2 nil)
-      ;; Define a function
-      (defun foo ()
-        (message "%s" "Hello, World!")))
+    ;; Change some variables
+    (setq variable1 t variable2 nil)
+    ;; Define a function
+    (defun foo ()
+      (message "%s" "Hello, World!"))
     :config
-    (progn
-      ;; Calling a function that is defined when the package loads
-      (function-defined-when-package-loads)))
+    ;; Calling a function that is defined when the package loads
+    (function-defined-when-package-loads))
 #+END_SRC
 
 This is just a very basic overview of =use-package=. There are many other ways
@@ -493,7 +491,7 @@ that is loaded at startup. Here is an example:
                                           gotham)))
 #+END_SRC
 
-All installed themes can be listed and chosen using the ~SPC T h~ key binding.
+All installed themes can be listed and chosen using the ~SPC T s~ key binding.
 
 *** Nohlsearch
 Spacemacs emulates the default vim behavior which highlights search results even

@@ -1,6 +1,6 @@
-;;; config.el --- Spacemacs Bootstrap Layer configuration File
+;;; config.el --- Spacemacs Bootstrap Layer configuration File  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -36,6 +36,7 @@
     ((emacs-lisp-mode lisp-mode) . lisp-indent-offset)
     (enh-ruby-mode . enh-ruby-indent-level)
     (erlang-mode . erlang-indent-level)
+    (go-mode . go-tab-width)
     (js2-mode . js2-basic-offset)
     (js3-mode . js3-indent-level)
     ((js-mode json-mode) . js-indent-level)
@@ -74,6 +75,10 @@ if used there.")
    dotspacemacs-visual-line-move-text nil)
   "If non-nil, J and K move lines up and down when in visual mode.")
 
+(defvar vim-style-enable-undo-region nil
+  "If non-nil, `u' is remapped to `undo' in visual state.
+Otherwise, in visual state `u' downcases visually selected text.")
+
 (defvar vim-style-ex-substitute-global
   (spacemacs|dotspacemacs-backward-compatibility
    dotspacemacs-ex-substitute-global nil)
@@ -86,7 +91,7 @@ if used there.")
                                  ("hybrid" "SkyBlue2" (bar . 2))
                                  ("replace" "chocolate" (hbar . 2))
                                  ("evilified" "LightGoldenrod3" box)
-                                 ("visual" "gray" (hbar . 2))
+                                 ("visual" "SteelBlue3" (hbar . 2))
                                  ("motion" "plum3" box)
                                  ("lisp" "HotPink1" box)
                                  ("iedit" "firebrick1" box)

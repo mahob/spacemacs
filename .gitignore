@@ -2,6 +2,7 @@
 *.elc
 *.pyc
 *.stackdump
+*.flycheck_packages.el
 /*.zip
 .DS_Store
 .ac-php-conf.json
@@ -27,8 +28,10 @@
 /image-dired
 /network-security.data
 /recentf
+/recentf~
 /session.*
 /srecode-map.el
+/tree-sitter
 \#*
 ac-comphist.dat
 auto-save-list/
@@ -55,6 +58,7 @@ org-journal.cache
 projectile-bookmarks.eld
 projectile.cache
 python-*-docs-html
+quelpa/
 quickurls
 racket-mode/
 semanticdb/
@@ -65,6 +69,7 @@ transient/
 url/*
 var/
 workspace
+undo/*
 
 # Private directory
 /doc/COMMUNITY.org

@@ -1,6 +1,6 @@
-;;; packages.el --- pandoc Layer packages File for Spacemacs
+;;; packages.el --- pandoc Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Christoph Paulik <cpaulik@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -31,13 +31,11 @@
     :defer t
     :commands spacemacs/run-pandoc
     :init
-    (progn
-      (spacemacs/declare-prefix "P" "pandoc")
-      (spacemacs/set-leader-keys "P/" 'spacemacs/run-pandoc))
+    (spacemacs/declare-prefix "P" "pandoc")
+    (spacemacs/set-leader-keys "P/" 'spacemacs/run-pandoc)
     :config
-    (progn
-      (setq pandoc-data-dir (concat spacemacs-cache-directory "pandoc/"))
-      (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))))
+    (setq pandoc-data-dir (concat spacemacs-cache-directory "pandoc/"))
+    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)))
 
 (defun pandoc/init-ox-pandoc ()
   (use-package ox-pandoc

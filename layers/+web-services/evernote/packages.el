@@ -1,6 +1,6 @@
-;;; packages.el --- Evernote Layer packages File for Spacemacs
+;;; packages.el --- Evernote Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -34,12 +34,11 @@
                geeknote-remove
                geeknote-move)
     :init
-    (progn
-      (spacemacs/declare-prefix "awe" "applications-evernote")
-      (spacemacs/set-leader-keys
-        "awec" 'geeknote-create
-        "awee" 'geeknote-edit
-        "awef" 'geeknote-find
-        "awes" 'geeknote-show
-        "awer" 'geeknote-remove
-        "awem" 'geeknote-move))))
+    (spacemacs/declare-prefix "awe" "applications-evernote")
+    (spacemacs/set-leader-keys
+      "awec" 'geeknote-create
+      "awee" 'geeknote-edit
+      "awef" 'geeknote-find
+      "awes" 'geeknote-show
+      "awer" 'geeknote-remove
+      "awem" 'geeknote-move)))

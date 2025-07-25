@@ -1,6 +1,6 @@
-;;; config.el --- mu4e Layer configuration File for Spacemacs
+;;; config.el --- mu4e Layer configuration File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -31,19 +31,13 @@
   "Binding used in the setup for `spacemacs-layouts' micro-state")
 
 (defvar mu4e-spacemacs-kill-layout-on-exit t
-  "When `t` exiting mu4e app will automatically kill its layout")
-
-(defvar mu4e-enable-async-operations nil
-  "Prefer async operations when sending emails.")
+  "When non-nil, exiting mu4e app will automatically kill its layout")
 
 (defvar mu4e-enable-notifications nil
   "If non-nil, enable desktop notifications for unread emails.")
 
 (defvar mu4e-enable-mode-line nil
   "If non-nil, enable display of unread emails in mode-line.")
-
-(defvar mu4e-use-maildirs-extension nil
-  "Use mu4e-maildirs-extension package if value is non-nil.")
 
 (defvar mu4e-list-modes
   '(mu4e-main-mode mu4e-headers-mode)
@@ -64,7 +58,7 @@
   "If non-nil org-mu4e is configured.")
 
 (defvar mu4e-autorun-background-at-startup nil
-  "If non-nil, mu4e will automatically run in background at emacs startup.")
+  "If non-nil, mu4e will automatically run in background at Emacs startup.")
 
 (when mu4e-installation-path
   (add-to-list 'load-path mu4e-installation-path))

@@ -1,6 +1,6 @@
-;;; funcs.el --- Language Server Protocol Layer functions file for Spacemacs
+;;; funcs.el --- Language Server Protocol Layer functions file for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Fangrui Song <i@maskray.me>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -66,8 +66,8 @@
                               "gS" #'helm-lsp-global-workspace-symbol))
    ((configuration-layer/package-usedp 'consult)
     (define-key lsp-mode-map
-      [remap lsp-treemacs-errors-list]
-      #'consult-lsp-diagnostics)
+                [remap lsp-treemacs-errors-list]
+                #'consult-lsp-diagnostics)
     (spacemacs/lsp-define-key lsp-command-map
                               "gs" #'consult-lsp-symbols
                               "gf" #'consult-lsp-file-symbols))))
@@ -75,9 +75,9 @@
 (defun spacemacs/lsp-bind-keys ()
   "Define key bindings for the lsp minor mode."
   (cl-ecase lsp-navigation
-    ('simple (spacemacs//lsp-bind-simple-navigation-functions "g"))
-    ('peek (spacemacs//lsp-bind-peek-navigation-functions "g"))
-    ('both
+    (simple (spacemacs//lsp-bind-simple-navigation-functions "g"))
+    (peek (spacemacs//lsp-bind-peek-navigation-functions "g"))
+    (both
      (spacemacs//lsp-bind-simple-navigation-functions "g")
      (spacemacs//lsp-bind-peek-navigation-functions "G")))
 
@@ -97,8 +97,6 @@
     ;; N.B. implementation and references covered by xref bindings / lsp provider...
     "g" "goto"
     "gt" #'lsp-find-type-definition
-    "gk" #'spacemacs/lsp-avy-goto-word
-    "gK" #'spacemacs/lsp-avy-goto-symbol
     "gM" #'lsp-ui-imenu
     ;; help
     "h" "help"
@@ -141,9 +139,10 @@
   (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
     (concat prefix-char "i") #'lsp-find-implementation
     (concat prefix-char "d") #'xref-find-definitions
+    (concat prefix-char "D") #'xref-find-definitions-other-window
     (concat prefix-char "r") #'xref-find-references
     (concat prefix-char "e") #'lsp-treemacs-errors-list
-    (concat prefix-char "b") #'xref-pop-marker-stack)
+    (concat prefix-char "b") #'xref-go-back)
   (cond
    ((configuration-layer/package-usedp 'helm)
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
@@ -154,6 +153,9 @@
     (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
       (concat prefix-char "s") #'lsp-ivy-workspace-symbol
       (concat prefix-char "S") #'lsp-ivy-global-workspace-symbol))
+   ((configuration-layer/package-usedp 'consult-lsp)
+    (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
+      (concat prefix-char "s") #'consult-lsp-symbols))
    (t (spacemacs/set-leader-keys-for-minor-mode 'lsp-mode
         (concat prefix-char "s") #'lsp-ui-find-workspace-symbol))))
 
@@ -183,21 +185,21 @@ KEY is a string corresponding to a key sequence
 KIND is a quoted symbol corresponding to an extension defined using
 `lsp-define-extensions'."
   (cl-ecase lsp-navigation
-    ('simple (spacemacs/set-leader-keys-for-major-mode mode
-               (concat "g" key)
-               (spacemacs//lsp-extension-name
-                layer-name backend-name "find" kind)))
-    ('peek (spacemacs/set-leader-keys-for-major-mode mode
-             (concat "g" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "peek" kind)))
-    ('both (spacemacs/set-leader-keys-for-major-mode mode
-             (concat "g" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "find" kind)
-             (concat "G" key)
-             (spacemacs//lsp-extension-name
-              layer-name backend-name "peek" kind)))))
+    (simple (spacemacs/set-leader-keys-for-major-mode mode
+              (concat "g" key)
+              (spacemacs//lsp-extension-name
+               layer-name backend-name "find" kind)))
+    (peek (spacemacs/set-leader-keys-for-major-mode mode
+            (concat "g" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "peek" kind)))
+    (both (spacemacs/set-leader-keys-for-major-mode mode
+            (concat "g" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "find" kind)
+            (concat "G" key)
+            (spacemacs//lsp-extension-name
+             layer-name backend-name "peek" kind)))))
 
 (defun spacemacs/lsp-bind-extensions-for-mode (mode
                                                layer-name
@@ -317,55 +319,3 @@ EXTRA is an additional parameter that's passed to the LSP function"
 (defun spacemacs//lsp-client-server-id ()
   "Return the ID of the LSP server associated with current project."
   (mapcar 'lsp--client-server-id (mapcar 'lsp--workspace-client (lsp-workspaces))))
-
-
-;; ivy integration
-
-(defun spacemacs//lsp-avy-document-symbol (all)
-  (interactive)
-  (let ((line 0) (col 0) (w (selected-window))
-        (ccls (and (memq major-mode '(c-mode c++-mode objc-mode)) (eq c-c++-backend 'lsp-ccls)))
-        (start-line (1- (line-number-at-pos (window-start))))
-        (end-line (1- (line-number-at-pos (window-end))))
-        ranges point0 point1
-        candidates)
-    (save-excursion
-      (goto-char 1)
-      (cl-loop for loc in
-               (lsp--send-request
-                (lsp--make-request
-                 "textDocument/documentSymbol"
-                 `(:textDocument ,(lsp--text-document-identifier)
-                                 :all ,(if all t :json-false)
-                                 :startLine ,start-line :endLine ,end-line)))
-               for range = (if ccls
-                               loc
-                             (->> loc (gethash "location") (gethash "range")))
-               for range_start = (gethash "start" range)
-               for range_end = (gethash "end" range)
-               for l0 = (gethash "line" range_start)
-               for c0 = (gethash "character" range_start)
-               for l1 = (gethash "line" range_end)
-               for c1 = (gethash "character" range_end)
-               while (<= l0 end-line)
-               when (>= l0 start-line)
-               do
-               (forward-line (- l0 line))
-               (forward-char c0)
-               (setq point0 (point))
-               (forward-line (- l1 l0))
-               (forward-char c1)
-               (setq point1 (point))
-               (setq line l1 col c1)
-               (push `((,point0 . ,point1) . ,w) candidates)))
-    (avy-with avy-document-symbol
-              (avy--process candidates
-                            (avy--style-fn avy-style)))))
-
-(defun spacemacs/lsp-avy-goto-word ()
-  (interactive)
-  (spacemacs//lsp-avy-document-symbol t))
-
-(defun spacemacs/lsp-avy-goto-symbol ()
-  (interactive)
-  (spacemacs//lsp-avy-document-symbol nil))

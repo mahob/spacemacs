@@ -1,6 +1,6 @@
-;;; packages.el --- pianobar Layer packages File for Spacemacs
+;;; packages.el --- pianobar Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Leo Littlebook  <texas.cyberthal@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -30,14 +30,13 @@
   (use-package pianobar
     :defer t
     :init
-    (progn
-      (spacemacs/declare-prefix
-        "am"  "music"
-        "amp" "Pianobar")
-      (spacemacs/set-leader-keys
-        "ampp" 'pianobar-play-or-pause
-        "ampn" 'pianobar-next-song
-        "amp+" 'pianobar-love-current-song
-        "amp-" 'pianobar-ban-current-song
-        "ampt" 'pianobar-shelve-current-song
-        "amps" 'pianobar-change-station))))
+    (spacemacs/declare-prefix
+      "am"  "music"
+      "amp" "Pianobar")
+    (spacemacs/set-leader-keys
+      "ampp" 'pianobar-play-or-pause
+      "ampn" 'pianobar-next-song
+      "amp+" 'pianobar-love-current-song
+      "amp-" 'pianobar-ban-current-song
+      "ampt" 'pianobar-shelve-current-song
+      "amps" 'pianobar-change-station)))

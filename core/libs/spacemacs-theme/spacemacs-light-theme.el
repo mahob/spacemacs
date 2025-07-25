@@ -1,4 +1,5 @@
-(require 'spacemacs-common)
+;; -*- lexical-binding: t; -*-
+(require 'spacemacs-theme)
 
 (deftheme spacemacs-light "Spacemacs theme, the light version")
 

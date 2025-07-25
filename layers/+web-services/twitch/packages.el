@@ -1,6 +1,6 @@
-;;; packages.el --- twitch Layer Packages File For Spacemacs.
+;;; packages.el --- twitch Layer Packages File For Spacemacs.  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2021 Sylvain Benner & Contributors
+;; Copyright (c) 2021-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Benedikt Broich <b.broich@posteo.de>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -35,8 +35,8 @@
 (defun twitch/init-helm-twitch ()
   (use-package helm-twitch
     :defer t
-    :init (progn
-            (spacemacs/set-leader-keys
-              "awst" 'helm-twitch)
-            (setq helm-twitch-enable-livestreamer-actions t
-                  helm-twitch-enable-chat-actions t))))
+    :init 
+    (spacemacs/set-leader-keys
+      "awst" 'helm-twitch)
+    (setq helm-twitch-enable-livestreamer-actions t
+          helm-twitch-enable-chat-actions t)))

@@ -1,6 +1,6 @@
-;;; packages.el --- faust layer packages file for Spacemacs.
+;;; packages.el --- faust layer packages file for Spacemacs.  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author:  Bart Brouns <bart@magnetophon.nl>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -38,11 +38,10 @@
     :defer t
     :mode "\\.\\(dsp\\|lib\\)\\'"
     :init
-    (progn
-      (spacemacs/set-leader-keys-for-major-mode 'faust-mode
-        "cf" 'spacemacs/faust-to-firefox
-        "cg" 'spacemacs/faust-to-jack-gtk
-        "cq" 'spacemacs/faust-to-jack-qt))))
+    (spacemacs/set-leader-keys-for-major-mode 'faust-mode
+      "cf" 'spacemacs/faust-to-firefox
+      "cg" 'spacemacs/faust-to-jack-gtk
+      "cq" 'spacemacs/faust-to-jack-qt)))
 
 (defun faust/post-init-yasnippet ()
   (add-hook 'faust-mode-hook 'spacemacs/load-yasnippet))

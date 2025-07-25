@@ -1,6 +1,6 @@
 ;;; core-spacebind.el --- Spacemacs Core File -*- lexical-binding: t -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Eugene "JAremko" Yaremenko <w3techplayground@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -20,11 +20,11 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+(require 'core-load-paths)
 (require 'core-keybindings)
 
 (defvar spacebind--eager-bind t
-  "If true bind keys right after `spacmeacs|spacebind' macro-expanse.
+  "If true bind keys right after `spacemacs|spacebind' macro-expanse.
 Otherwise binding happens at the next event loop.")
 
 ;;;; Binding stacks
@@ -451,7 +451,7 @@ NOTE: You can override key labels and displayed key sequences with :label <TEXT>
                                   (plist-get key))))
        (seq-reduce
         (lambda (acc pair)
-          (if-let ((stack (get-stack (car pair)))
+          (if-let* ((stack (get-stack (car pair)))
                    (stack-var (cadr pair)))
               ;; We do it this way because `nconc' should have
               ;; the shortest list as the first argument.

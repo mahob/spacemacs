@@ -1,6 +1,6 @@
-;;; core-hooks.el --- Spacemacs Core File
+;;; core-hooks.el --- Spacemacs Core File -*- lexical-binding: t -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -38,10 +38,6 @@
   (dolist (hook hooks)
     (add-hook hook fun append local)))
 
-(defun spacemacs/add-all-to-hook (hook &rest funs)
-  "Add functions to hook."
-  (spacemacs/add-to-hook hook funs))
-
 (defun spacemacs/add-to-hook (hook funs)
   "Add list of functions to hook."
   (dolist (fun funs)
@@ -54,6 +50,8 @@
 Transient hooks are ephemeral hooks that vanishes when executed.
 If FUNC is a lambda you must give it a name with FNAME. "
   (declare (indent 1))
+  (unless (or (symbolp func) fname)
+    (error "spacemacs|add-transient-hook: No name provided for transient hook"))
   (let ((hfunc (intern (format "spacemacs//transient-hook-%s"
                                (if fname fname func))))
         result)

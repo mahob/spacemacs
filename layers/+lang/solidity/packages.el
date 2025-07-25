@@ -1,6 +1,6 @@
-;;; packages.el --- solidity layer packages file for Spacemacs.
+;;; packages.el --- solidity layer packages file for Spacemacs.  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Brooklyn Zelenka <be.zelenka@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -47,4 +47,4 @@
   (use-package solidity-flycheck
     :defer t
     :init
-    (add-hook 'solidity-mode-hook #'(lambda () (require 'solidity-flycheck)))))
+    (add-hook 'solidity-mode-hook (lambda () (require 'solidity-flycheck)))))
