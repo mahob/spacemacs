@@ -38,22 +38,29 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
-     ;; better-defaults
+     auto-completion
+     better-defaults
+     docker
      emacs-lisp
-     ;; git
+     git
      helm
+     html
      ;; lsp
-     ;; markdown
+     markdown
      multiple-cursors
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
+     nginx
+     org
+     python
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom
+            shell-default-term-shell "/usr/bin/bash")
+     spell-checking
      ;; syntax-checking
      ;; version-control
-     treemacs)
+     treemacs
+     (xclipboard :variables xclipboard-enable-cliphist t)
+     yaml)
 
 
    ;; List of additional packages that will be installed without being wrapped
@@ -566,8 +573,88 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (defun open-terminal-at-bottom ()
+    "Open a terminal at the bottom with 25% height."
+    (let ((win (split-window-below (floor (* 0.75 (window-total-height))))))
+      (select-window win)
+      ;; Try vterm
+      (condition-case nil
+          (progn
+            (require 'vterm)
+            (vterm))
+        (error
+         (condition-case nil
+             (progn
+               ;; Fallback to multi-term
+               (multi-term))
+           (error
+            ;; Fallback to ansi-term
+            (ansi-term (getenv "SHELL"))))))
+      (other-window 1)))
+  (add-hook 'emacs-startup-hook 'open-terminal-at-bottom)
   )
-
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(a ace-link add-node-modules-path aggressive-indent aio alert all-the-icons
+       anaconda-mode auto-compile auto-highlight-symbol auto-yasnippet
+       avy-jump-helm-line blacken bui centered-cursor-mode clean-aindent-mode
+       cliphist closql code-cells code-review column-enforce-mode company
+       company-anaconda company-web concurrent cond-let counsel counsel-css
+       ctable cython-mode dap-mode deferred define-word devdocs diminish
+       dired-quick-sort disable-mouse docker dockerfile-mode dotenv-mode
+       drag-stuff dumb-jump eat edit-indirect elisp-def elisp-demos
+       elisp-slime-nav emacsql emmet-mode emojify emr epc esh-help
+       eshell-prompt-extras eshell-z eval-sexp-fu evil-anzu evil-args
+       evil-cleverparens evil-collection evil-easymotion evil-escape
+       evil-evilified-state evil-exchange evil-goggles evil-iedit-state
+       evil-indent-plus evil-lion evil-lisp-state evil-matchit evil-mc
+       evil-nerd-commenter evil-numbers evil-org evil-surround evil-textobj-line
+       evil-tutor evil-unimpaired evil-visual-mark-mode evil-visualstar
+       expand-region eyebrowse fancy-battery flycheck flyspell-correct
+       flyspell-correct-helm forge ggtags gh-md ghub git-link git-messenger
+       git-modes git-timemachine gitignore-templates gntp gnuplot golden-ratio
+       google-translate haml-mode helm-ag helm-c-yasnippet helm-comint
+       helm-company helm-cscope helm-css-scss helm-descbinds helm-git-grep
+       helm-ls-git helm-make helm-mode-manager helm-org helm-org-rifle
+       helm-projectile helm-purpose helm-pydoc helm-swoop helm-themes helm-xref
+       hide-comnt highlight-indentation highlight-numbers highlight-parentheses
+       hl-todo holy-mode htmlize hungry-delete hybrid-mode impatient-mode
+       importmagic indent-guide info+ inspector ivy link-hint live-py-mode llama
+       load-env-vars log4e lorem-ipsum lsp-docker lsp-mode lsp-pyright
+       lsp-treemacs macrostep magit magit-section markdown-mode markdown-toc
+       multi-line multi-term multi-vterm mwim nameless nginx-mode nose
+       open-junk-file org-category-capture org-cliplink org-contrib org-download
+       org-mime org-pomodoro org-present org-project-capture org-projectile
+       org-rich-yank org-superstar orgit orgit-forge overseer page-break-lines
+       paradox password-generator pcre2el pet pip-requirements pipenv pippel
+       poetry popwin prettier-js pug-mode py-isort pydoc pyenv-mode pylookup
+       pytest pythonic pyvenv quickrun rainbow-delimiters reformatter
+       restart-emacs ruff-format sass-mode scss-mode shell-pop simple-httpd
+       slim-mode smeargle space-doc spaceline spacemacs-purpose-popwin
+       spacemacs-whitespace-cleanup sphinx-doc string-edit-at-point
+       string-inflection swiper symbol-overlay symon tablist tagedit term-cursor
+       terminal-here toc-org transient treemacs-evil treemacs-icons-dired
+       treemacs-magit treemacs-persp treemacs-projectile treepy undo-fu
+       undo-fu-session unfill uuidgen vi-tilde-fringe volatile-highlights vterm
+       vundo web-beautify web-completion-data web-mode wgrep winum with-editor
+       writeroom-mode ws-butler xcscope yaml yaml-mode yapfify yasnippet
+       yasnippet-snippets)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
