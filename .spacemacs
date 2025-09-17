@@ -41,6 +41,7 @@ This function should only modify configuration layer settings."
      ;; auto-completion
      ansible
      better-defaults
+     dotspacemacs-themes
      emacs-lisp
      git
      helm
