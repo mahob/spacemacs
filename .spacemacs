@@ -57,6 +57,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      ;; version-control
      treemacs
+     (xclipboard :variables xclipboard-enable-cliphist t)
      yaml)
 
 
@@ -570,6 +571,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; activate xclip
+  (require 'xclip)
+  (xclip-mode 1)
   )
 
 
