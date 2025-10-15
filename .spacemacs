@@ -32,8 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     ;; ----------------------------------------------------------------
+   '(;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
@@ -41,10 +40,13 @@ This function should only modify configuration layer settings."
      ;; auto-completion
      ansible
      better-defaults
+     (docker :variables
+             docker-dockerfile-backend 'lsp)
      dotspacemacs-themes
      emacs-lisp
      git
      helm
+     html
      (javascript :variables
                  js2-mode-show-strict-warnings nil)
      lsp
@@ -61,6 +63,7 @@ This function should only modify configuration layer settings."
      web-beautify
      treemacs
      (xclipboard :variables xclipboard-enable-cliphist t)
+     xml
      yaml)
 
 
@@ -593,13 +596,14 @@ This function is called at the very end of Spacemacs initialization."
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    '(package-selected-packages
-     '(a ace-link add-node-modules-path aggressive-indent alert all-the-icons ansible
-         ansible-doc auto-compile auto-highlight-symbol auto-yasnippet
+     '(a ace-link add-node-modules-path aggressive-indent aio alert all-the-icons
+         ansible ansible-doc auto-compile auto-highlight-symbol auto-yasnippet
          avy-jump-helm-line bui centered-cursor-mode clean-aindent-mode cliphist
          closql code-cells code-review column-enforce-mode company company-ansible
-         cond-let cython-mode dap-mode deferred define-word devdocs diminish
-         dired-quick-sort disable-mouse dotenv-mode drag-stuff dumb-jump eat
-         edit-indirect elisp-def elisp-demos elisp-slime-nav emacsql emojify emr
+         company-web cond-let counsel counsel-css cython-mode dap-mode deferred
+         define-word devdocs diminish dired-quick-sort disable-mouse docker
+         dockerfile-mode dotenv-mode drag-stuff dumb-jump eat edit-indirect
+         elisp-def elisp-demos elisp-slime-nav emacsql emmet-mode emojify emr
          esh-help eshell-prompt-extras eshell-z eval-sexp-fu evil-anzu evil-args
          evil-cleverparens evil-collection evil-easymotion evil-escape
          evil-evilified-state evil-exchange evil-goggles evil-iedit-state
@@ -610,31 +614,33 @@ This function is called at the very end of Spacemacs initialization."
          flycheck-package flycheck-pos-tip flyspell-correct flyspell-correct-helm
          forge ggtags gh-md ghub git-link git-messenger git-modes git-timemachine
          gitignore-templates gntp gnuplot golden-ratio google-translate grizzl
-         helm-ag helm-c-yasnippet helm-comint helm-company helm-descbinds
-         helm-ls-git helm-lsp helm-make helm-mode-manager helm-org helm-org-rifle
-         helm-projectile helm-purpose helm-pydoc helm-swoop helm-xref hide-comnt
-         highlight-indentation highlight-numbers highlight-parentheses hl-todo
-         holy-mode htmlize hungry-delete hybrid-mode impatient-mode import-js
-         indent-guide info+ inspector jinja2-mode js-doc js2-mode js2-refactor
-         json-mode json-navigator json-reformat json-snatcher link-hint
-         live-py-mode livid-mode llama load-env-vars log4e lorem-ipsum lsp-docker
-         lsp-mode lsp-origami lsp-treemacs lsp-ui macrostep magit magit-section
-         markdown-mode markdown-toc multi-line multi-term multi-vterm
-         multiple-cursors mwim nameless nodejs-repl npm-mode open-junk-file
-         org-category-capture org-cliplink org-contrib org-download org-mime
-         org-pomodoro org-present org-project-capture org-projectile org-rich-yank
-         org-superstar orgit orgit-forge origami overseer package-lint
-         page-break-lines paradox password-generator pcre2el pip-requirements
-         pipenv pippel poetry popwin pos-tip prettier-js py-isort pydoc pyenv-mode
-         pylookup pytest pythonic pyvenv quickrun rainbow-delimiters restart-emacs
-         shell-pop simple-httpd skewer-mode smeargle space-doc spaceline
+         haml-mode helm-ag helm-c-yasnippet helm-comint helm-company helm-css-scss
+         helm-descbinds helm-ls-git helm-lsp helm-make helm-mode-manager helm-org
+         helm-org-rifle helm-projectile helm-purpose helm-pydoc helm-swoop
+         helm-xref hide-comnt highlight-indentation highlight-numbers
+         highlight-parentheses hl-todo holy-mode htmlize hungry-delete hybrid-mode
+         impatient-mode import-js indent-guide info+ inspector ivy jinja2-mode
+         js-doc js2-mode js2-refactor json-mode json-navigator json-reformat
+         json-snatcher link-hint live-py-mode livid-mode llama load-env-vars log4e
+         lorem-ipsum lsp-docker lsp-mode lsp-origami lsp-treemacs lsp-ui macrostep
+         magit magit-section markdown-mode markdown-toc multi-line multi-term
+         multi-vterm multiple-cursors mwim nameless nodejs-repl npm-mode
+         open-junk-file org-category-capture org-cliplink org-contrib org-download
+         org-mime org-pomodoro org-present org-project-capture org-projectile
+         org-rich-yank org-superstar orgit orgit-forge origami overseer
+         package-lint page-break-lines paradox password-generator pcre2el
+         pip-requirements pipenv pippel poetry popwin pos-tip prettier-js pug-mode
+         py-isort pydoc pyenv-mode pylookup pytest pythonic pyvenv quickrun
+         rainbow-delimiters restart-emacs sass-mode scss-mode shell-pop
+         simple-httpd skewer-mode slim-mode smeargle space-doc spaceline
          spacemacs-purpose-popwin spacemacs-whitespace-cleanup sphinx-doc
-         string-edit-at-point string-inflection symbol-overlay symon term-cursor
-         terminal-here tern toc-org transient treemacs-evil treemacs-icons-dired
-         treemacs-magit treemacs-persp treemacs-projectile treepy undo-fu
-         undo-fu-session unfill uuidgen vi-tilde-fringe volatile-highlights vterm
-         vundo web-beautify wgrep winum with-editor writeroom-mode ws-butler yaml
-         yaml-mode yasnippet yasnippet-snippets)))
+         string-edit-at-point string-inflection swiper symbol-overlay symon
+         tablist tagedit term-cursor terminal-here tern toc-org transient
+         treemacs-evil treemacs-icons-dired treemacs-magit treemacs-persp
+         treemacs-projectile treepy undo-fu undo-fu-session unfill uuidgen
+         vi-tilde-fringe volatile-highlights vterm vundo web-beautify
+         web-completion-data web-mode wgrep winum with-editor writeroom-mode
+         ws-butler yaml yaml-mode yasnippet yasnippet-snippets)))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
