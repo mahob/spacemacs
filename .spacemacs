@@ -32,14 +32,16 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(;; ----------------------------------------------------------------
+   '(
+     ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
+     auto-completion
      ansible
      better-defaults
+     clojure
      (docker :variables
              docker-dockerfile-backend 'lsp)
      dotspacemacs-themes
@@ -569,7 +571,10 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (push '(\"melpa-stable\" . \"stable.melpa.org/packages/\") configuration-layer--elpa-archives)
+  (push '(use-package . \"melpa-stable\") package-pinned-packages)
   )
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -577,11 +582,19 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; activate xclip
-  (require 'xclip)
-  (xclip-mode 1)
-  )
-
+  ;; file associations
+  (push '("\\.yml\\'" . yaml-mode) auto-mode-alist)
+  (push '("\\.yaml\\'" . yaml-mode) auto-mode-alist)
+  (push '("hosts\\'" . yaml-mode) auto-mode-alist)
+  (global-font-lock-mode t) ; Ensure font-lock is always on globally
+  ;; open ~/Developer/Projects as root in treemacs
+  (with-eval-after-load 'treemacs
+    (defun my/treemacs-open-at-fixed-root ()
+      (interactive)
+      ;; Set default-directory and show treemacs for that directory
+      (let ((default-directory "~/Developer/Projects/"))
+        (treemacs-add-and-display-current-project-exclusively)))
+    (spacemacs/set-leader-keys "ft" #'my/treemacs-open-at-fixed-root)))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
