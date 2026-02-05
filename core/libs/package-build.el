@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2011-2024 Donald Ephraim Curtis
 ;; Copyright (C) 2012-2024 Steve Purcell
-;; Copyright (C) 2016-2025 Jonas Bernoulli
+;; Copyright (C) 2016-2026 Jonas Bernoulli
 ;; Copyright (C) 2009 Phil Hagelberg
 
 ;; Author: Donald Ephraim Curtis <dcurtis@milkbox.net>
@@ -1022,6 +1022,7 @@ Use a sandbox if `package-build--use-sandbox' is non-nil."
 (defun package-build--write-pkg-file (rcp dir)
   (pcase-let (((eieio name version summary dependencies) rcp))
     (with-temp-file (expand-file-name (format "%s-pkg.el" name) dir)
+      (set-buffer-file-coding-system 'utf-8)
       (insert ";; -*- no-byte-compile: t; lexical-binding: nil -*-\n")
       (insert (format "(define-package \"%s\" \"%s\"\n" name version))
       (insert (format "  %s\n" (prin1-to-string (concat summary "."))))
@@ -1076,7 +1077,13 @@ that is put in the tarball."
     (when (and (eq system-type 'windows-nt)
                (eq (package-build--tar-type) 'gnu))
       (setq tar (replace-regexp-in-string "^\\([a-z]\\):" "/\\1" tar)))
-    (let ((default-directory directory))
+    (let ((default-directory directory)
+          (process-environment process-environment))
+      (when (eq system-type 'darwin)
+        ;; Files whose name begin with ._ are added to tarballs
+        ;; by, default, but at least we can turn that off.  See
+        ;; also https://superuser.com/a/260264.
+        (setenv "COPYFILE_DISABLE" "true"))
       (process-file
        package-build-tar-executable nil
        (get-buffer-create "*package-build-checkout*") nil
@@ -1224,6 +1231,11 @@ is the same as the value of `export_file_name'."
 
 ;;; Extract Metadata
 
+(defconst package-build--http-regexp
+  (concat
+   "\\`\\(http\\)://"
+   (regexp-opt (list "github.com" "gitlab.com" "codeberg.org" "git.sr.ht"))))
+
 (defun package-build--extract-from-library (rcp files)
   "Store information from the main-library from FILES in RCP."
   (let* ((name (oref rcp name))
@@ -1250,19 +1262,22 @@ is the same as the value of `export_file_name'."
                    (package-read-from-string
                     (string-join require-lines " ")))))))
         (oset rcp webpage
-              (or (if (fboundp 'lm-website)
-                      (lm-website)
-                    (with-no-warnings
-                      (lm-homepage)))
+              (or (let ((site (cond ((fboundp 'lm-website)
+                                     (lm-website))
+                                    ((fboundp 'lm-homepage)
+                                     (lm-homepage)))))
+                    (if (string-match package-build--http-regexp site)
+                        (replace-match "https" t t site 1)
+                      site))
                   (and-let* ((format (oref rcp repopage-format)))
                     (format format (oref rcp repo)))))
         (oset rcp keywords (lm-keywords-list))
         (oset rcp maintainers
-              (if (fboundp 'lm-maintainers)
-                  (lm-maintainers)
-                (with-no-warnings
-                  (and-let* ((maintainer (lm-maintainer)))
-                    (list maintainer)))))
+              (cond ((fboundp 'lm-maintainers)
+                     (lm-maintainers))
+                    ((fboundp 'lm-maintainer)
+                     (and-let* ((maintainer (lm-maintainer)))
+                       (list maintainer)))))
         (oset rcp authors (lm-authors))))))
 
 (defun package-build--extract-from-package (rcp files)
@@ -1291,7 +1306,10 @@ is the same as the value of `export_file_name'."
                         (eval deps)))
           (when-let ((v (or (alist-get :url plist)
                             (alist-get :homepage plist))))
-            (oset rcp webpage v))
+            (oset rcp webpage
+                  (if (string-match package-build--http-regexp v)
+                      (replace-match "https" t t v 1)
+                    v)))
           (when-let ((v (alist-get :keywords plist)))
             (oset rcp keywords v))
           (when-let ((v (alist-get :maintainers plist)))
@@ -1772,6 +1790,7 @@ If optional PRETTY-PRINT is non-nil, then pretty-print
                   vc-pkgs))))))
     (setq entries (cl-sort entries #'string< :key #'car))
     (with-temp-file (or file (expand-file-name "archive-contents"))
+      (set-buffer-file-coding-system 'utf-8)
       (let ((print-level nil)
             (print-length nil))
         (if pretty-print
@@ -1785,6 +1804,7 @@ If optional PRETTY-PRINT is non-nil, then pretty-print
     (setq vc-pkgs (cl-sort vc-pkgs #'string< :key #'car))
     (with-temp-file (expand-file-name "elpa-packages.eld"
                                       (and file (file-name-nondirectory file)))
+      (set-buffer-file-coding-system 'utf-8)
       (let ((print-level nil)
             (print-length nil))
         (insert "((")
