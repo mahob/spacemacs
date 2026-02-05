@@ -38,12 +38,22 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     ;; auto-completion
      ansible
      better-defaults
      clojure
+     ;; See https://www.spacemacs.org/layers/+tools/docker/README.html
+     ;;
+     ;; Requirements:
+     ;;    Install hadolint from here: https://github.com/hadolint/hadolint
+     ;;    Install NVM from here:https://github.com/nvm-sh/nvm
+     ;;    Install NodeJS (LTS) using: npm use --lts
+     ;;    Install dockerfile-language-server-nodejs
+     ;;
      (docker :variables
-             docker-dockerfile-backend 'lsp)
+             docker-dockerfile-backend 'lsp
+             docker-image-semgrep-rules nil ;; Disables semgrep
+             docker-langserver-command '("docker-langserver" "--stdio"))
      dotspacemacs-themes
      emacs-lisp
      git
@@ -54,16 +64,22 @@ This function should only modify configuration layer settings."
      lsp
      markdown
      multiple-cursors
+     nginx
      org
+     (plantuml :variables
+               plantuml-jar-path "~/plantuml.jar"
+               plantuml-default-exec-mode 'library)
      python
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      spell-checking
      syntax-checking
-     ;; version-control
-     web-beautify
+     toml
      treemacs
+     version-control
+     web-beautify
+     windows-scripts
      (xclipboard :variables xclipboard-enable-cliphist t)
      xml
      yaml)
@@ -637,11 +653,11 @@ This function is called at the very end of Spacemacs initialization."
          json-snatcher link-hint live-py-mode livid-mode llama load-env-vars log4e
          lorem-ipsum lsp-docker lsp-mode lsp-origami lsp-treemacs lsp-ui macrostep
          magit magit-section markdown-mode markdown-toc multi-line multi-term
-         multi-vterm multiple-cursors mwim nameless nodejs-repl npm-mode
-         open-junk-file org-category-capture org-cliplink org-contrib org-download
-         org-mime org-pomodoro org-present org-project-capture org-projectile
-         org-rich-yank org-superstar orgit orgit-forge origami overseer
-         package-lint page-break-lines paradox password-generator pcre2el
+         multi-vterm multiple-cursors mwim nameless nginx-mode nodejs-repl
+         npm-mode open-junk-file org-category-capture org-cliplink org-contrib
+         org-download org-mime org-pomodoro org-present org-project-capture
+         org-projectile org-rich-yank org-superstar orgit orgit-forge origami
+         overseer package-lint page-break-lines paradox password-generator pcre2el
          pip-requirements pipenv pippel poetry popwin pos-tip prettier-js pug-mode
          py-isort pydoc pyenv-mode pylookup pytest pythonic pyvenv quickrun
          rainbow-delimiters restart-emacs sass-mode scss-mode shell-pop
@@ -653,7 +669,8 @@ This function is called at the very end of Spacemacs initialization."
          treemacs-projectile treepy undo-fu undo-fu-session unfill uuidgen
          vi-tilde-fringe volatile-highlights vterm vundo web-beautify
          web-completion-data web-mode wgrep winum with-editor writeroom-mode
-         ws-butler yaml yaml-mode yasnippet yasnippet-snippets)))
+         ws-butler yaml yaml-mode yasnippet yasnippet-snippets))
+   '(warning-suppress-log-types '((org-element org-element-parser))))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
