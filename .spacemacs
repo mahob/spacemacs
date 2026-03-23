@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
              docker-dockerfile-backend 'lsp
              docker-image-semgrep-rules nil ;; Disables semgrep
              docker-langserver-command '("docker-langserver" "--stdio"))
-     dotspacemacs-themes
+     ;; dotspacemacs-themes
      emacs-lisp
      git
      helm
@@ -68,12 +68,25 @@ This function should only modify configuration layer settings."
      org
      (plantuml :variables
                plantuml-jar-path "~/plantuml.jar"
-               plantuml-default-exec-mode 'library)
+               ;; plantuml-java-command "/usr/bin/java"
+               ;; plantuml-java-exec "/usr/bin/java"
+               ;; plantuml-default-exec-mode 'jar
+               ;; plantuml-default-exec-mode 'library
+               )
      python
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      spell-checking
+     ;; Syntax Checking: Install ruby and the sqlint gem.
+     ;;   gem install sqlint
+     ;; Formatting: Install sqlfmt and move it into your $PATH
+     ;;  wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${installdir}/bin"
+     (sql :variables
+          sql-backend 'lsp
+          sql-capitalize-keywords t
+          sql-auto-indent nil
+          sql-lsp-sqls-workspace-config-path 'workspace)
      syntax-checking
      toml
      treemacs
@@ -81,7 +94,7 @@ This function should only modify configuration layer settings."
      web-beautify
      windows-scripts
      (xclipboard :variables xclipboard-enable-cliphist t)
-     xml
+     ;; xml
      yaml)
 
 
@@ -141,6 +154,18 @@ It should only modify the values of Spacemacs settings."
    ;; experimental state please use only for testing purposes.
    ;; (default nil)
    dotspacemacs-use-spacelpa nil
+
+   ;; Set the list of ELPA archives used by Spacemacs.
+   ;; This replaces your (push ... configuration-layer--elpa-archives)
+   ;; The default list usually includes 'melpa' and 'gnu'.
+   ;; You can add 'melpa-stable' here.
+   dotspacemacs-elpa-archives
+   '(("melpa" . "https://melpa.org/packages/")
+     ("gnu" . "https://elpa.gnu.org/packages/")
+     ;; Add melpa-stable here if you specifically need it
+     ;; (Note: Spacemacs generally manages melpa-stable behind the scenes if you specify stable versions)
+     ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
+     )
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
    ;; (default t)
@@ -259,7 +284,8 @@ It should only modify the values of Spacemacs settings."
    ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("FiraCode Nerd Font Mono"
+                               ;; "Source Code Pro"
                                :size 10.0
                                :weight normal
                                :width normal)
@@ -587,8 +613,8 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (push '(\"melpa-stable\" . \"stable.melpa.org/packages/\") configuration-layer--elpa-archives)
-  (push '(use-package . \"melpa-stable\") package-pinned-packages)
+  ;; (push '(\"melpa-stable\" . \"stable.melpa.org/packages/\") configuration-layer--elpa-archives)
+  ;; (push '(use-package . \"melpa-stable\") package-pinned-packages)
   )
 
 
@@ -603,6 +629,11 @@ before packages are loaded."
   (push '("\\.yaml\\'" . yaml-mode) auto-mode-alist)
   (push '("hosts\\'" . yaml-mode) auto-mode-alist)
   (global-font-lock-mode t) ; Ensure font-lock is always on globally
+  (with-eval-after-load 'plantuml-mode
+    (setq plantuml-java-args '("-Djava.awt.headless=true")) ; Optional: for server environments
+    (setq plantuml-jar-args '("-jar" "~/plantuml.jar")) ; If you have a custom JAR
+    (setq plantuml-java-exec "/usr/bin/java")
+    (setq plantuml-java-command "/usr/bin/java"))
   ;; open ~/Developer/Projects as root in treemacs
   (with-eval-after-load 'treemacs
     (defun my/treemacs-open-at-fixed-root ()
@@ -663,11 +694,11 @@ This function is called at the very end of Spacemacs initialization."
          rainbow-delimiters restart-emacs sass-mode scss-mode shell-pop
          simple-httpd skewer-mode slim-mode smeargle space-doc spaceline
          spacemacs-purpose-popwin spacemacs-whitespace-cleanup sphinx-doc
-         string-edit-at-point string-inflection swiper symbol-overlay symon
-         tablist tagedit term-cursor terminal-here tern toc-org transient
-         treemacs-evil treemacs-icons-dired treemacs-magit treemacs-persp
-         treemacs-projectile treepy undo-fu undo-fu-session unfill uuidgen
-         vi-tilde-fringe volatile-highlights vterm vundo web-beautify
+         sql-indent sqlup-mode string-edit-at-point string-inflection swiper
+         symbol-overlay symon tablist tagedit term-cursor terminal-here tern
+         toc-org transient treemacs-evil treemacs-icons-dired treemacs-magit
+         treemacs-persp treemacs-projectile treepy undo-fu undo-fu-session unfill
+         uuidgen vi-tilde-fringe volatile-highlights vterm vundo web-beautify
          web-completion-data web-mode wgrep winum with-editor writeroom-mode
          ws-butler yaml yaml-mode yasnippet yasnippet-snippets))
    '(warning-suppress-log-types '((org-element org-element-parser))))
