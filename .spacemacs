@@ -57,6 +57,12 @@ This function should only modify configuration layer settings."
      ;; dotspacemacs-themes
      emacs-lisp
      git
+     ;; see: https://www.spacemacs.org/layers/+web-services/github-copilot/README.html
+     ;;
+     ;; Requirements:
+     ;;   npm install -g @modelcontextprotocol/server-filesystem
+     (github-copliot :variables
+                     github-copilot-enable-commit-messages 'golem)
      helm
      html
      (javascript :variables
@@ -641,7 +647,17 @@ before packages are loaded."
       ;; Set default-directory and show treemacs for that directory
       (let ((default-directory "~/Developer/Projects/"))
         (treemacs-add-and-display-current-project-exclusively)))
-    (spacemacs/set-leader-keys "ft" #'my/treemacs-open-at-fixed-root)))
+    (spacemacs/set-leader-keys "ft" #'my/treemacs-open-at-fixed-root))
+  ;; GitHub Copilot
+  (with-eval-after-load 'mcp-hub ;; This list is the "Single Source of Truth"
+    (setq github-copilot-mcp-servers '(
+                                       ;; Add the filesystem server
+                                       ;; It must be installed (e.g., via "npm install -g @modelcontextprotocol/server-filesystem")
+                                       ("fs" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem"
+                                                                      ;; This path MUST be absolute and point to your projects "
+                                                                      "/home/brm1rt/Developer/Projects")))))
+    ;; We must also tell the mcp-hub to use this new list
+    (setq mcp-hub-servers github-copilot-mcp-servers)))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
